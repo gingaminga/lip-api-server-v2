@@ -68,3 +68,28 @@ export const RELATION_DB = {
   TYPE: process.env.RELATION_DB_TYPE || "mysql",
   USER_NAME: process.env.RELATION_DB_USER_NAME || "",
 };
+
+export const SOCIAL = {
+  GOOGLE: {
+    NAME: "google",
+    KEY: {
+      DEFAULT: process.env.SOCIAL_GOOGLE_KEY,
+      SECRET: process.env.SOCIAL_GOOGLE_SECRET_KEY,
+    },
+  },
+  KAKAO: {
+    NAME: "kakao",
+    KEY: {
+      DEFAULT: process.env.SOCIAL_KAKAO_KEY,
+      SECRET: process.env.SOCIAL_KAKAO_SECRET_KEY,
+    },
+  },
+  NAVER: {
+    NAME: "naver",
+    KEY: {
+      DEFAULT: process.env.SOCIAL_NAVER_KEY,
+      SECRET: process.env.SOCIAL_NAVER_SECRET_KEY,
+    },
+  },
+  REDIRECT_URI: process.env.SOCIAL_REDIRECT_URI,
+};

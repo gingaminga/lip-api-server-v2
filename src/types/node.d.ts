@@ -16,6 +16,13 @@ declare namespace NodeJS {
     RELATION_DB_SCHEMA: string;
     RELATION_DB_TYPE: "mysql";
     RELATION_DB_USER_NAME: string;
+    SOCIAL_GOOGLE_KEY: string;
+    SOCIAL_GOOGLE_SECRET_KEY: string;
+    SOCIAL_KAKAO_KEY: string;
+    SOCIAL_KAKAO_SECRET_KEY: string;
+    SOCIAL_NAVER_KEY: string;
+    SOCIAL_NAVER_SECRET_KEY: string;
+    SOCIAL_REDIRECT_URI: string;
     SSL_CA_PATH_AND_FILE: string | undefined;
     SSL_CERT_PATH_AND_FILE: string | undefined;
     SSL_KEY_PATH_AND_FILE: string | undefined;

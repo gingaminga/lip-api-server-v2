@@ -1,10 +1,10 @@
-import { SocialService } from "@services/social.service";
+import { AuthService } from "@services/auth.service";
 import SocialGoogle from "@utils/social/google";
 import SocialKakao from "@utils/social/kakao";
 import SocialNaver from "@utils/social/naver";
 
-describe(`[Social service] getURL method test :)`, () => {
-  const socialService = new SocialService();
+describe(`[Auth service] getURL method test :)`, () => {
+  const authService = new AuthService();
 
   it(`should be return kakao url.`, () => {
     // given
@@ -12,7 +12,7 @@ describe(`[Social service] getURL method test :)`, () => {
     const kakaoURL = SocialKakao.getCallbackURL();
 
     // when
-    const response = socialService.getURL(type);
+    const response = authService.getSocialURL(type);
 
     // then
     expect(response.url).toBe(kakaoURL);
@@ -24,7 +24,7 @@ describe(`[Social service] getURL method test :)`, () => {
     const naverURL = SocialNaver.getCallbackURL();
 
     // when
-    const response = socialService.getURL(type);
+    const response = authService.getSocialURL(type);
 
     // then
     expect(response.url).toEqual(naverURL);
@@ -36,7 +36,7 @@ describe(`[Social service] getURL method test :)`, () => {
     const googleURL = SocialGoogle.getCallbackURL();
 
     // when
-    const response = socialService.getURL(type);
+    const response = authService.getSocialURL(type);
 
     // then
     expect(response.url).toEqual(googleURL);

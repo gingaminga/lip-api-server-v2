@@ -1,5 +1,5 @@
 import GetSocialURLParamDTO from "@dto/params/social/get-social-url.param.dto";
-import { socialService } from "@loaders/service.loader";
+import { authService } from "@loaders/service.loader";
 import { RequestDTOHandler } from "@my-types/express.type";
 
 /**
@@ -8,7 +8,7 @@ import { RequestDTOHandler } from "@my-types/express.type";
 export const getSocialURLController: RequestDTOHandler<GetSocialURLParamDTO> = (_req, res) => {
   const { type } = res.locals.requestDTO;
 
-  const response = socialService.getURL(type);
+  const response = authService.getSocialURL(type);
 
   res.result(response);
 };

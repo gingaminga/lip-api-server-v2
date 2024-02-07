@@ -1,5 +1,5 @@
 const INVERSIFY_TYPES = {
-  SocialService: Symbol.for("SocialService"),
+  AuthService: Symbol.for("AuthService"),
   ToDoService: Symbol.for("ToDoService"),
 };
 

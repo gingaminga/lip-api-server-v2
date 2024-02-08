@@ -1,9 +1,10 @@
 import ToDo from "@my-rdb/entities/to-do.entity";
+import User from "@my-rdb/entities/user.entity";
 import { PROJECT, RELATION_DB } from "@utils/constants";
 import { DataSourceOptions } from "typeorm";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 
-const entities = [ToDo];
+const entities = [ToDo, User];
 
 const relationDBOption: DataSourceOptions = {
   database: RELATION_DB.SCHEMA,

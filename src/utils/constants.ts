@@ -93,3 +93,11 @@ export const SOCIAL = {
   },
   REDIRECT_URI: process.env.SOCIAL_REDIRECT_URI,
 };
+
+export const JWT = {
+  EXPRIED: {
+    ACCESS_TOKEN: PROJECT.NODE_ENV === "development" ? "1m" : "24h",
+    REFRESH_TOKEN: PROJECT.NODE_ENV === "development" ? "1h" : "20d",
+  },
+  KEY: process.env.JWT_KEY || "",
+};

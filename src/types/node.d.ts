@@ -1,6 +1,7 @@
 declare namespace NodeJS {
   interface ProcessEnv {
     HTTPS: "true" | "false";
+    JWT_KEY: string;
     LOG_MAX_COUNT: number;
     LOG_MAX_SIZE: string;
     LOG_PATH: string;

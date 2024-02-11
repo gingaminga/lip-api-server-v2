@@ -13,14 +13,9 @@ class Kakao implements ISocial {
 
   private readonly authInstance: AxiosBase;
 
-  constructor() {
-    this.apiInstance = new AxiosBase({
-      baseURL: KAKAO_URL.API.HOST,
-    });
-
-    this.authInstance = new AxiosBase({
-      baseURL: KAKAO_URL.AUTH.HOST,
-    });
+  constructor(apiInstance: AxiosBase, authInstance: AxiosBase) {
+    this.apiInstance = apiInstance;
+    this.authInstance = authInstance;
   }
 
   /**
@@ -90,6 +85,16 @@ class Kakao implements ISocial {
   }
 }
 
-const SocialKakao = new Kakao();
+const apiInstance = new AxiosBase({
+  baseURL: KAKAO_URL.API.HOST,
+});
+
+const authInstance = new AxiosBase({
+  baseURL: KAKAO_URL.AUTH.HOST,
+});
+
+const SocialKakao = new Kakao(apiInstance, authInstance);
 
 export default SocialKakao;
+
+export { Kakao };

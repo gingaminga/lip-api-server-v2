@@ -13,14 +13,9 @@ class Google implements ISocial {
 
   private readonly authInstance: AxiosBase;
 
-  constructor() {
-    this.apiInstance = new AxiosBase({
-      baseURL: GOOGLE_URL.API.HOST,
-    });
-
-    this.authInstance = new AxiosBase({
-      baseURL: GOOGLE_URL.AUTH.HOST1,
-    });
+  constructor(apiInstance: AxiosBase, authInstance: AxiosBase) {
+    this.apiInstance = apiInstance;
+    this.authInstance = authInstance;
   }
 
   /**
@@ -86,6 +81,16 @@ class Google implements ISocial {
   }
 }
 
-const SocialGoogle = new Google();
+const apiInstance = new AxiosBase({
+  baseURL: GOOGLE_URL.API.HOST,
+});
+
+const authInstance = new AxiosBase({
+  baseURL: GOOGLE_URL.AUTH.HOST1,
+});
+
+const SocialGoogle = new Google(apiInstance, authInstance);
 
 export default SocialGoogle;
+
+export { Google };

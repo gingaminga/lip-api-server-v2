@@ -15,14 +15,9 @@ class Naver implements ISocial {
 
   private readonly authInstance: AxiosBase;
 
-  constructor() {
-    this.apiInstance = new AxiosBase({
-      baseURL: NAVER_URL.API.HOST,
-    });
-
-    this.authInstance = new AxiosBase({
-      baseURL: NAVER_URL.AUTH.HOST,
-    });
+  constructor(apiInstance: AxiosBase, authInstance: AxiosBase) {
+    this.apiInstance = apiInstance;
+    this.authInstance = authInstance;
   }
 
   /**
@@ -88,6 +83,16 @@ class Naver implements ISocial {
   }
 }
 
-const SocialNaver = new Naver();
+const apiInstance = new AxiosBase({
+  baseURL: NAVER_URL.API.HOST,
+});
+
+const authInstance = new AxiosBase({
+  baseURL: NAVER_URL.AUTH.HOST,
+});
+
+const SocialNaver = new Naver(apiInstance, authInstance);
 
 export default SocialNaver;
+
+export { Naver };

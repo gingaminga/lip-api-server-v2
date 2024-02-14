@@ -44,8 +44,6 @@ class Kakao implements ISocial {
       redirect_uri: redirectURI,
     };
 
-    console.log(params);
-
     const { data } = await this.authInstance.post<IRequestGetToken, IResponseGetToken>(endpoint, params, {
       "Content-Type": "application/x-www-form-urlencoded",
     });

@@ -1,5 +1,5 @@
 import logger from "@config/logger.config";
-import { redisClient } from "@loaders/database.loader";
+import { redisClient } from "@loaders/redis.loader";
 import { REDIS } from "@utils/constants";
 
 /**

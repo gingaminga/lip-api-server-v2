@@ -1,15 +1,16 @@
 import SocialLoginResponseDTO from "@dto/responses/auth/social-login.response.dto";
 import GetSocialURLDTO from "@dto/responses/get-social-url.dto";
-import { rdbClient, redisClient } from "@loaders/database.loader";
+import { rdbUtil, socialUtil } from "@loaders/util.loader";
 import User from "@my-rdb/entities/user.entity";
 import { UserRepository } from "@my-rdb/repositories/user.repository";
+import RedisClient from "@my-redis/client";
 import { ISocialUserInfo, TSocialType } from "@my-types/social.type";
 import { JWT, PROJECT } from "@utils/constants";
+import INVERSIFY_TYPES from "@utils/invesify-type";
 import { createJWTToken } from "@utils/jwt";
 import { nicknameRegExp } from "@utils/regexp";
-import { SocialUtil } from "@utils/social/common";
 import { getRandomText } from "@utils/util";
-import { injectable } from "inversify";
+import { inject, injectable } from "inversify";
 
 export interface IAuthService {
   getSocialURL: (type: TSocialType) => GetSocialURLDTO;
@@ -18,11 +19,17 @@ export interface IAuthService {
 
 @injectable()
 export class AuthService implements IAuthService {
-  private readonly socialUtil = SocialUtil;
+  private readonly redisClient;
 
-  private readonly redisClient = redisClient;
+  private readonly userRepository;
 
-  private readonly userRepository = UserRepository;
+  constructor(
+    @inject(INVERSIFY_TYPES.UserRepository) userRepository: typeof UserRepository,
+    @inject(INVERSIFY_TYPES.RedisClient) redisClient: RedisClient,
+  ) {
+    this.userRepository = userRepository;
+    this.redisClient = redisClient;
+  }
 
   /**
    * @description 최종 닉네임 가져오기
@@ -50,7 +57,7 @@ export class AuthService implements IAuthService {
    * @param type 소셜 종류
    */
   getSocialURL(type: TSocialType) {
-    const url = this.socialUtil.getURL(type);
+    const url = socialUtil.getURL(type);
 
     return new GetSocialURLDTO(url);
   }
@@ -118,7 +125,7 @@ export class AuthService implements IAuthService {
    * @param socialUserInfo 소셜 유저 정보
    */
   private async getOrCreateUser(type: TSocialType, socialUserInfo: ISocialUserInfo) {
-    const userInfo = await rdbClient.transaction(async (manager) => {
+    const userInfo = await rdbUtil.transaction(async (manager) => {
       const userRepository = manager.withRepository(this.userRepository);
 
       let user = await userRepository.findOne({
@@ -151,7 +158,7 @@ export class AuthService implements IAuthService {
    * @param code 소셜 인가코드
    */
   async socialLogin(type: TSocialType, code: string) {
-    const socialUserInfo = await this.socialUtil.getUserInfo(type, code);
+    const socialUserInfo = await socialUtil.getUserInfo(type, code);
 
     const userInfo = await this.getOrCreateUser(type, socialUserInfo);
     const tokens = await this.generateOAuthToken(

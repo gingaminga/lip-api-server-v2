@@ -1,12 +1,12 @@
 import logger from "@config/logger.config";
-import { rdbClient } from "@loaders/database.loader";
+import { rdbUtil } from "@loaders/util.loader";
 
 /**
  * @description RDB 실행
  */
 export const startRDB = async () => {
   try {
-    await rdbClient.start();
+    await rdbUtil.start();
   } catch (error) {
     logger.error(error);
     process.kill(process.pid);
@@ -18,7 +18,7 @@ export const startRDB = async () => {
  */
 export const stopRDB = async () => {
   try {
-    await rdbClient.stop();
+    await rdbUtil.stop();
   } catch (error) {
     logger.error(error);
     process.kill(process.pid);

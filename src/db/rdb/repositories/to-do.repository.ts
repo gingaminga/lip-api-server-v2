@@ -1,7 +1,7 @@
-import { rdbClient } from "@loaders/database.loader";
+import { rdbUtil } from "@loaders/util.loader";
 import ToDo from "@my-rdb/entities/to-do.entity";
 
-export const ToDoRepository = rdbClient.getRepository(ToDo).extend({
+export const ToDoRepository = rdbUtil.getRepository(ToDo).extend({
   /**
    * @description 할 일 내용 수정하기
    * @param id

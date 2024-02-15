@@ -1,8 +1,8 @@
 import { ISocialUserInfo, TSocialType } from "@my-types/social.type";
 import { SOCIAL } from "@utils/constants";
-import SocialGoogle from "@utils/social/google";
-import SocialKakao from "@utils/social/kakao";
-import SocialNaver from "@utils/social/naver";
+import Google from "@utils/social/google";
+import Kakao from "@utils/social/kakao";
+import Naver from "@utils/social/naver";
 
 interface ISocial {
   getUserInfo(type: TSocialType, code: string): Promise<ISocialUserInfo>;
@@ -10,13 +10,13 @@ interface ISocial {
 }
 
 class Social implements ISocial {
-  private readonly google: typeof SocialGoogle;
+  private readonly google: Google;
 
-  private readonly kakao: typeof SocialKakao;
+  private readonly kakao: Kakao;
 
-  private readonly naver: typeof SocialNaver;
+  private readonly naver: Naver;
 
-  constructor(google: typeof SocialGoogle, kakao: typeof SocialKakao, naver: typeof SocialNaver) {
+  constructor(google: Google, kakao: Kakao, naver: Naver) {
     this.google = google;
     this.kakao = kakao;
     this.naver = naver;
@@ -120,4 +120,4 @@ class Social implements ISocial {
   }
 }
 
-export const SocialUtil = new Social(SocialGoogle, SocialKakao, SocialNaver);
+export default Social;

@@ -81,16 +81,4 @@ class Google implements ISocial {
   }
 }
 
-const apiInstance = new AxiosBase({
-  baseURL: GOOGLE_URL.API.HOST,
-});
-
-const authInstance = new AxiosBase({
-  baseURL: GOOGLE_URL.AUTH.HOST1,
-});
-
-const SocialGoogle = new Google(apiInstance, authInstance);
-
-export default SocialGoogle;
-
-export { Google };
+export default Google;

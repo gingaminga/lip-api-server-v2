@@ -83,16 +83,4 @@ class Naver implements ISocial {
   }
 }
 
-const apiInstance = new AxiosBase({
-  baseURL: NAVER_URL.API.HOST,
-});
-
-const authInstance = new AxiosBase({
-  baseURL: NAVER_URL.AUTH.HOST,
-});
-
-const SocialNaver = new Naver(apiInstance, authInstance);
-
-export default SocialNaver;
-
-export { Naver };
+export default Naver;

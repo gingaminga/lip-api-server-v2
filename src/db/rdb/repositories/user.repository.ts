@@ -1,4 +1,4 @@
-import { rdbClient } from "@loaders/database.loader";
+import { rdbUtil } from "@loaders/util.loader";
 import User from "@my-rdb/entities/user.entity";
 
-export const UserRepository = rdbClient.getRepository(User);
+export const UserRepository = rdbUtil.getRepository(User);

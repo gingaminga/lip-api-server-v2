@@ -1,7 +1,8 @@
 import RemoveToDoDTO from "@dto/remove-to-do.dto";
 import ToDo from "@my-rdb/entities/to-do.entity";
 import { ToDoRepository } from "@my-rdb/repositories/to-do.repository";
-import { injectable } from "inversify";
+import INVERSIFY_TYPES from "@utils/invesify-type";
+import { inject, injectable } from "inversify";
 
 export interface IToDoService {
   add(content: string, date: string): Promise<ToDo>;
@@ -14,8 +15,8 @@ export interface IToDoService {
 export class ToDoService implements IToDoService {
   private toDoRepository;
 
-  constructor() {
-    this.toDoRepository = ToDoRepository;
+  constructor(@inject(INVERSIFY_TYPES.ToDoRepository) toDoRepository: typeof ToDoRepository) {
+    this.toDoRepository = toDoRepository;
   }
 
   /**

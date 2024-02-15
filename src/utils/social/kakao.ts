@@ -83,16 +83,4 @@ class Kakao implements ISocial {
   }
 }
 
-const apiInstance = new AxiosBase({
-  baseURL: KAKAO_URL.API.HOST,
-});
-
-const authInstance = new AxiosBase({
-  baseURL: KAKAO_URL.AUTH.HOST,
-});
-
-const SocialKakao = new Kakao(apiInstance, authInstance);
-
-export default SocialKakao;
-
-export { Kakao };
+export default Kakao;

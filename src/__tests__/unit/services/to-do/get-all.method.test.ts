@@ -5,7 +5,7 @@ jest.mock("@my-rdb/repositories/to-do.repository");
 const mockedToDoRepository = jest.mocked(ToDoRepository);
 
 describe(`[ToDo service] getAll method test :)`, () => {
-  const toDoService = new ToDoService();
+  const toDoService = new ToDoService(mockedToDoRepository);
 
   it(`should be error by find method of toDoRepository.`, async () => {
     // given

@@ -6,7 +6,7 @@ jest.mock("@my-rdb/repositories/to-do.repository");
 const mockedToDoRepository = jest.mocked(ToDoRepository);
 
 describe(`[ToDo service] modifyContent method test :)`, () => {
-  const toDoService = new ToDoService();
+  const toDoService = new ToDoService(mockedToDoRepository);
   const id = 1;
   const content = "new content";
 

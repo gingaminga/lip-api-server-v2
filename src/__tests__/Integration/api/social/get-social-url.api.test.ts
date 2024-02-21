@@ -1,9 +1,7 @@
 import app from "@app";
+import { socialGoogle, socialKakao, socialNaver } from "@loaders/util.loader";
 import { HTTP_STATUS_CODE, RESPONSE_STATUS } from "@utils/constants";
 import ERROR_MESSAGE from "@utils/error-message";
-import SocialGoogle from "@utils/social/google";
-import SocialKakao from "@utils/social/kakao";
-import SocialNaver from "@utils/social/naver";
 import request from "supertest";
 
 const path = "/api/social/url";
@@ -47,7 +45,7 @@ describe(`GET ${path} API test :)`, () => {
     it(`should respond kakao social callback url.`, async () => {
       // given
       params.type = "kakao";
-      const kakaoURL = SocialKakao.getCallbackURL();
+      const kakaoURL = socialKakao.getCallbackURL();
 
       // when
       const { body, status } = await request(app).get(path).query(params);
@@ -61,7 +59,7 @@ describe(`GET ${path} API test :)`, () => {
     it(`should respond naver social callback url.`, async () => {
       // given
       params.type = "naver";
-      const kakaoURL = SocialNaver.getCallbackURL();
+      const kakaoURL = socialNaver.getCallbackURL();
 
       // when
       const { body, status } = await request(app).get(path).query(params);
@@ -75,7 +73,7 @@ describe(`GET ${path} API test :)`, () => {
     it(`should respond google social callback url.`, async () => {
       // given
       params.type = "google";
-      const kakaoURL = SocialGoogle.getCallbackURL();
+      const kakaoURL = socialGoogle.getCallbackURL();
 
       // when
       const { body, status } = await request(app).get(path).query(params);

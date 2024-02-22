@@ -14,7 +14,7 @@ import { inject, injectable } from "inversify";
 
 export interface IAuthService {
   getSocialURL: (type: TSocialType) => GetSocialURLDTO;
-  socialLogin: (type: TSocialType, code: string) => void;
+  socialLogin: (type: TSocialType, code: string) => Promise<SocialLoginResponseDTO>;
 }
 
 @injectable()

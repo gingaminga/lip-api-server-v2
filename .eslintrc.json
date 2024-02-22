@@ -19,6 +19,7 @@
         "argsIgnorePattern": "^_" // 사용하지 않는 변수는 prefix로 _ 붙이기
       }
     ],
+    "class-methods-use-this": "warn",
     "import/extensions": [
       "error",
       {

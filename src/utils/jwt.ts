@@ -21,11 +21,15 @@ export const createJWTToken = <T extends object>(payload: T, options: SignOption
  * @param token 토큰
  */
 export const verifyJWTToken = <T>(token: string) => {
-  const decodedData = jwt.verify(token, JWT.KEY);
+  try {
+    const decodedData = jwt.verify(token, JWT.KEY);
 
-  if (!checkJWTPayload(decodedData)) {
-    throw new CError(ERROR_MESSAGE.INTERNAL_SERVER_ERROR, HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR);
+    if (!checkJWTPayload(decodedData)) {
+      throw new CError(ERROR_MESSAGE.UNAUTHORIZED, HTTP_STATUS_CODE.UNAUTHORIZED);
+    }
+
+    return decodedData as JwtPayload & T;
+  } catch (error) {
+    throw new CError(error, HTTP_STATUS_CODE.UNAUTHORIZED);
   }
-
-  return decodedData as JwtPayload & T;
 };

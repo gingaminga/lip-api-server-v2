@@ -3,7 +3,7 @@ import { NextFunction, Request, RequestHandler, Response } from "express";
 /**
  * @description RequestHandler + DTO 커스텀
  */
-export type RequestDTOHandler<T> = (
+export type RequestDTOHandler<T = unknown> = (
   req: Request,
   res: Response & {
     locals: Response["locals"] & {
@@ -16,6 +16,6 @@ export type RequestDTOHandler<T> = (
 /**
  * @description Response + DTO 커스텀
  */
-export type ResponseDTO<T> = Response<any, Record<string, any>> & {
+export type ResponseDTO<T = unknown> = Response<any, Record<string, any>> & {
   locals: Record<string, any> & { requestDTO: T };
 };

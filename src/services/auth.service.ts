@@ -5,7 +5,9 @@ import User from "@my-rdb/entities/user.entity";
 import { UserRepository } from "@my-rdb/repositories/user.repository";
 import RedisClient from "@my-redis/client";
 import { ISocialUserInfo, TSocialType } from "@my-types/social.type";
-import { JWT, PROJECT } from "@utils/constants";
+import { HTTP_STATUS_CODE, JWT, PROJECT } from "@utils/constants";
+import CError from "@utils/error";
+import ERROR_MESSAGE from "@utils/error-message";
 import INVERSIFY_TYPES from "@utils/invesify-type";
 import { createJWTToken } from "@utils/jwt";
 import { nicknameRegExp } from "@utils/regexp";
@@ -14,6 +16,7 @@ import { inject, injectable } from "inversify";
 
 export interface IAuthService {
   getSocialURL: (type: TSocialType) => GetSocialURLDTO;
+  getUserInfoByNickname: (nickname: string) => Promise<User>;
   socialLogin: (type: TSocialType, code: string) => Promise<SocialLoginResponseDTO>;
 }
 
@@ -60,6 +63,24 @@ export class AuthService implements IAuthService {
     const url = socialUtil.getURL(type);
 
     return new GetSocialURLDTO(url);
+  }
+
+  /**
+   * @description nickname으로 유저 정보 가져오기
+   * @param nickname 닉네임
+   */
+  async getUserInfoByNickname(nickname: string) {
+    const userInfo = await this.userRepository.findOne({
+      where: {
+        nickname,
+      },
+    });
+
+    if (!userInfo) {
+      throw new CError(ERROR_MESSAGE.NOT_EXIST_USER, HTTP_STATUS_CODE.BAD_REQUEST);
+    }
+
+    return userInfo;
   }
 
   /**

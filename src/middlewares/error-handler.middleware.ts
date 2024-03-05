@@ -18,6 +18,6 @@ export default (error: unknown, _req: Request, res: Response, _: NextFunction) =
 
   const { code, message } = new CError(error);
 
-  const errorMessage = `${ERROR_MESSAGE.INTERNAL_SERVER_ERROR} ${message}`;
+  const errorMessage = `Catched error with ${code} code.. ${message}`;
   res.error(code, errorMessage);
 };

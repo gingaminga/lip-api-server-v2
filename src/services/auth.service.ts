@@ -5,7 +5,7 @@ import User from "@my-rdb/entities/user.entity";
 import { UserRepository } from "@my-rdb/repositories/user.repository";
 import RedisClient from "@my-redis/client";
 import { ISocialUserInfo, TSocialType } from "@my-types/social.type";
-import { HTTP_STATUS_CODE, JWT, PROJECT } from "@utils/constants";
+import { JWT, PROJECT } from "@utils/constants";
 import CError from "@utils/error";
 import ERROR_MESSAGE from "@utils/error-message";
 import INVERSIFY_TYPES from "@utils/invesify-type";
@@ -77,7 +77,7 @@ export class AuthService implements IAuthService {
     });
 
     if (!userInfo) {
-      throw new CError(ERROR_MESSAGE.NOT_EXIST_USER, HTTP_STATUS_CODE.BAD_REQUEST);
+      throw new CError(ERROR_MESSAGE.NOT_EXIST_USER);
     }
 
     return userInfo;

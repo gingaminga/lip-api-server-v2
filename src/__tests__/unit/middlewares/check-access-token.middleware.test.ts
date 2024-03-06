@@ -24,9 +24,9 @@ describe(`Check access token middleware test :)`, () => {
     req.headers.authorization = "";
   });
 
-  it(`should be ${HTTP_STATUS_CODE.UNAUTHORIZED} error when no bearer header.`, () => {
+  it(`should be ${HTTP_STATUS_CODE.BAD_REQUEST} error when no bearer header.`, () => {
     // given
-    const error = new Error(ERROR_MESSAGE.UNAUTHORIZED);
+    const error = new Error(ERROR_MESSAGE.BAD_REQUEST);
 
     // when & then
     expect(async () => {
@@ -34,7 +34,7 @@ describe(`Check access token middleware test :)`, () => {
     }).rejects.toThrow(error);
   });
 
-  it(`should be ${HTTP_STATUS_CODE.UNAUTHORIZED} error when no token.`, () => {
+  it(`should be ${HTTP_STATUS_CODE.FORBIDDEN} error when invalid token.`, () => {
     // given
     req.headers.authorization = "Bearer 1234";
     const error = new Error("jwt malformed");
@@ -45,7 +45,28 @@ describe(`Check access token middleware test :)`, () => {
     }).rejects.toThrow(error);
   });
 
-  it(`should be ${HTTP_STATUS_CODE.BAD_REQUEST} error when authService getUserInfoByNickname is error.`, () => {
+  it(`should be ${HTTP_STATUS_CODE.UNAUTHORIZED} error when token is expired.`, () => {
+    // given
+    const payload = {
+      nickname: "test",
+    };
+    const token = createJWTToken(payload, {
+      expiresIn: "1s",
+    });
+
+    req.headers.authorization = `Bearer ${token}`;
+    const error = new Error("jwt expired");
+
+    // when & then
+    expect(async () => {
+      await new Promise((resolve) => {
+        setTimeout(() => resolve(true), 1500);
+      });
+      await checkAccessTokenMiddleware(req, res, next);
+    }).rejects.toThrow(error);
+  });
+
+  it(`should be ${HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR} error when authService getUserInfoByNickname is error.`, () => {
     // given
     const payload = {
       nickname: "test",

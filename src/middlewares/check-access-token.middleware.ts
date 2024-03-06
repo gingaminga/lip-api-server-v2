@@ -16,13 +16,29 @@ export default async (req: Request, res: ResponseDTO, next: NextFunction) => {
   const [type, token] = authorization.split(" ");
 
   if (type !== "Bearer") {
-    throw new CError(ERROR_MESSAGE.UNAUTHORIZED, HTTP_STATUS_CODE.UNAUTHORIZED);
+    throw new CError(ERROR_MESSAGE.BAD_REQUEST, HTTP_STATUS_CODE.BAD_REQUEST);
   }
 
-  const { nickname } = verifyJWTToken<IOAuthJwtPayload>(token);
+  try {
+    const { nickname } = verifyJWTToken<IOAuthJwtPayload>(token);
 
-  const userInfo = await authService.getUserInfoByNickname(nickname);
-  res.locals.userInfo = userInfo;
+    const userInfo = await authService.getUserInfoByNickname(nickname);
+    res.locals.userInfo = userInfo;
 
-  next();
+    next();
+  } catch (error) {
+    const customError = new CError(error);
+
+    if (error instanceof CError) {
+      throw error;
+    } else if (error instanceof Error) {
+      if (error.message.startsWith("jwt malformed")) {
+        throw new CError(error, HTTP_STATUS_CODE.FORBIDDEN);
+      } else if (error.message.startsWith("jwt expired")) {
+        throw new CError(error, HTTP_STATUS_CODE.UNAUTHORIZED);
+      }
+    }
+
+    throw customError;
+  }
 };

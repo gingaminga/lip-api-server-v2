@@ -28,7 +28,7 @@ describe(`Error handler middleware test :)`, () => {
   it(`should be ${HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR} error.`, () => {
     // given
     const error = new Error("Internal server error!");
-    const errorMessage = `${ERROR_MESSAGE.INTERNAL_SERVER_ERROR} ${error.message}`;
+    const errorMessage = `Catched error with ${HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR} code.. ${error.message}`;
     jest.spyOn(Joi, "isError").mockReturnValue(false);
 
     // when

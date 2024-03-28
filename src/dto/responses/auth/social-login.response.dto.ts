@@ -6,12 +6,14 @@ class SocialLoginResponseDTO {
 
   refreshToken: string;
 
-  userInfo: User;
+  userInfo: Omit<User, "socialKey">;
 
   constructor({ accessToken, refreshToken, userInfo }: ISocialLoginResponse) {
     this.accessToken = accessToken;
     this.refreshToken = refreshToken;
-    this.userInfo = userInfo;
+
+    const { socialKey, ...otherUserInfo } = userInfo;
+    this.userInfo = otherUserInfo;
   }
 }
 

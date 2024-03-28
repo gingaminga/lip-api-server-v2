@@ -1,6 +1,8 @@
+import logger from "@config/logger.config";
 import { ISocial } from "@my-types/social.type";
 import { IRequestGetToken, IResponseGetToken, IResponseGetUserInfo } from "@my-types/social/naver.type";
-import { PROJECT, SOCIAL } from "@utils/constants";
+import { HTTP_STATUS_CODE, PROJECT, SOCIAL } from "@utils/constants";
+import CError from "@utils/error";
 import { NAVER_URL } from "@utils/social/url";
 import { AxiosBase } from "axios-classification";
 
@@ -18,6 +20,9 @@ class Naver implements ISocial {
   constructor(apiInstance: AxiosBase, authInstance: AxiosBase) {
     this.apiInstance = apiInstance;
     this.authInstance = authInstance;
+
+    this.setAPIInstanceInterseptor();
+    this.setAuthInstanceInterseptor();
   }
 
   /**
@@ -80,6 +85,102 @@ class Naver implements ISocial {
    */
   setAccessToken(token: string) {
     this.apiInstance.setBearerToken(token);
+  }
+
+  /**
+   * @description api instance의 요청 인터셉트 설정하기
+   */
+  private setAPIInstanceInterseptor() {
+    this.apiInstance.setRequestInterceptor(
+      (request) => {
+        const { baseURL, data, method = "", url } = request;
+
+        logger.info(`[${method.toUpperCase()}] Request ${baseURL}${url} ${data ? JSON.stringify(data) : ""}`);
+
+        return request;
+      },
+      (error) => {
+        throw error;
+      },
+    );
+
+    this.apiInstance.setResponseInterceptor(
+      (response) => {
+        const { data, config } = response;
+        const { baseURL, method = "", url } = config;
+
+        logger.info(`[${method.toUpperCase()}] Response ${baseURL}${url} ${data ? JSON.stringify(data) : ""}`);
+
+        return response;
+      },
+      async (error) => {
+        if (!this.apiInstance.isAxiosError(error)) {
+          throw error;
+        }
+
+        const { response } = error;
+        const { config, data, status, statusText } = response || {};
+        const { baseURL, method = "", url } = config || {};
+
+        logger.error(
+          `[${method.toUpperCase()}] Response ${baseURL}${url} ${statusText}(${status}) ${
+            data ? JSON.stringify(data) : ""
+          }`,
+        );
+
+        const customError = new CError("Naver api error", HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR);
+
+        throw customError;
+      },
+    );
+  }
+
+  /**
+   * @description auth instance의 요청 인터셉트 설정하기
+   */
+  private setAuthInstanceInterseptor() {
+    this.authInstance.setRequestInterceptor(
+      (request) => {
+        const { baseURL, data, method = "", url } = request;
+
+        logger.info(`[${method.toUpperCase()}] Request ${baseURL}${url} ${data ? JSON.stringify(data) : ""}`);
+
+        return request;
+      },
+      (error) => {
+        throw error;
+      },
+    );
+
+    this.authInstance.setResponseInterceptor(
+      (response) => {
+        const { data, config } = response;
+        const { baseURL, method = "", url } = config;
+
+        logger.info(`[${method.toUpperCase()}] Response ${baseURL}${url} ${data ? JSON.stringify(data) : ""}`);
+
+        return response;
+      },
+      async (error) => {
+        if (!this.authInstance.isAxiosError(error)) {
+          throw error;
+        }
+
+        const { response } = error;
+        const { config, data, status, statusText } = response || {};
+        const { baseURL, method = "", url } = config || {};
+
+        logger.error(
+          `[${method.toUpperCase()}] Response ${baseURL}${url} ${statusText}(${status}) ${
+            data ? JSON.stringify(data) : ""
+          }`,
+        );
+
+        const customError = new CError("Naver auth error", HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR);
+
+        throw customError;
+      },
+    );
   }
 }
 

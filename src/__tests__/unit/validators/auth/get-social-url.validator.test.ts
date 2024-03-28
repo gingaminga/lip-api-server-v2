@@ -2,7 +2,7 @@ import GetSocialURLParamDTO from "@dto/params/social/get-social-url.param.dto";
 import { ResponseDTO } from "@my-types/express.type";
 import { TSocialType } from "@my-types/social.type";
 import { SOCIAL } from "@utils/constants";
-import { getSocialURLSchema, getSocialURLValidator } from "@validators/social/get-social-url.validator";
+import { getSocialURLSchema, getSocialURLValidator } from "@validators/auth/get-social-url.validator";
 import { Request } from "express";
 
 describe(`Get social url validator test :)`, () => {

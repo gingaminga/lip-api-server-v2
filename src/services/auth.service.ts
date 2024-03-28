@@ -1,5 +1,5 @@
+import GetSocialURLDTO from "@dto/responses/auth/get-social-url.dto";
 import SocialLoginResponseDTO from "@dto/responses/auth/social-login.response.dto";
-import GetSocialURLDTO from "@dto/responses/get-social-url.dto";
 import { rdbUtil, socialUtil } from "@loaders/util.loader";
 import User from "@my-rdb/entities/user.entity";
 import { UserRepository } from "@my-rdb/repositories/user.repository";

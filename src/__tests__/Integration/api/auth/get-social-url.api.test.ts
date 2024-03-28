@@ -4,7 +4,7 @@ import { HTTP_STATUS_CODE, RESPONSE_STATUS } from "@utils/constants";
 import ERROR_MESSAGE from "@utils/error-message";
 import request from "supertest";
 
-const path = "/api/social/url";
+const path = "/api/auth/social-url";
 
 describe(`GET ${path} API test :)`, () => {
   const type = "";

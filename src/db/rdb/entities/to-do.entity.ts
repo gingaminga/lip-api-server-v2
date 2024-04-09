@@ -1,9 +1,26 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import User from "@my-rdb/entities/user.entity";
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
 @Entity()
 class ToDo {
   @PrimaryGeneratedColumn()
   id!: number;
+
+  @Column({
+    comment: "완료 유무",
+    default: "N",
+    length: 1,
+    type: "char",
+  })
+  checked!: string;
 
   @Column({
     comment: "할 일 내용",
@@ -34,6 +51,12 @@ class ToDo {
     type: "timestamp",
   })
   deletedAt!: Date;
+
+  @ManyToOne(() => User, (user) => user.toDos, {
+    nullable: false,
+    onDelete: "CASCADE",
+  })
+  user!: User;
 }
 
 export default ToDo;

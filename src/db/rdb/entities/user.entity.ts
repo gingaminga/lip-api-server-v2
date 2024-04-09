@@ -1,5 +1,14 @@
+import ToDo from "@my-rdb/entities/to-do.entity";
 import { TSocialType } from "@my-types/social.type";
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
 @Entity()
 class User {
@@ -51,6 +60,9 @@ class User {
     type: "timestamp",
   })
   deletedAt!: Date | null;
+
+  @OneToMany(() => ToDo, (toDo) => toDo.user)
+  toDos!: ToDo[];
 }
 
 export default User;

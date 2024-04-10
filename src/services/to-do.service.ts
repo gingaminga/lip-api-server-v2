@@ -1,11 +1,13 @@
 import RemoveToDoDTO from "@dto/remove-to-do.dto";
+import AddToDoResponseDTO from "@dto/responses/to-do/add-to-do.response.dto";
 import ToDo from "@my-rdb/entities/to-do.entity";
+import User from "@my-rdb/entities/user.entity";
 import { ToDoRepository } from "@my-rdb/repositories/to-do.repository";
 import INVERSIFY_TYPES from "@utils/invesify-type";
 import { inject, injectable } from "inversify";
 
 export interface IToDoService {
-  add(content: string, date: string): Promise<ToDo>;
+  add(content: string, date: string, userInfo: User): Promise<AddToDoResponseDTO>;
   getAll(): Promise<ToDo[]>;
   modifyContent(id: number, content: string): Promise<ToDo>;
   remove(id: number): Promise<RemoveToDoDTO>;
@@ -23,14 +25,21 @@ export class ToDoService implements IToDoService {
    * @description 할 일 추가하기
    * @param content 내용
    * @param date 날짜
+   * @param userInfo 유저 정보
    */
-  async add(content: string, date: string) {
+  async add(content: string, date: string, userInfo: User) {
     const toDo = new ToDo();
     toDo.content = content;
     toDo.date = date;
-    const newToDo = await this.toDoRepository.save(toDo);
+    toDo.user = userInfo;
 
-    return newToDo;
+    const newToDo = await this.toDoRepository.save(toDo, {
+      transaction: false,
+    });
+
+    const dto = new AddToDoResponseDTO(newToDo);
+
+    return dto;
   }
 
   /**

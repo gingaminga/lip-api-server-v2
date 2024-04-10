@@ -6,9 +6,10 @@ import { RequestDTOHandler } from "@my-types/express.type";
  * @description 할 일 추가하는 컨트롤러
  */
 export const addToDoController: RequestDTOHandler<AddToDoParamDTO> = async (_req, res) => {
-  const { content, date } = res.locals.requestDTO;
+  const { requestDTO, userInfo } = res.locals;
+  const { content, date } = requestDTO;
 
-  const response = await toDoService.add(content, date);
+  const response = await toDoService.add(content, date, userInfo);
 
   res.result(response);
 };

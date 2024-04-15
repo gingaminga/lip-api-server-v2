@@ -10,7 +10,7 @@ const path = "/api/to-do/content";
 describe(`POST ${path} API test :)`, () => {
   const content = "Test content";
   const id = 1;
-  const fullPath = `${path}/${id}`;
+  const fakePath = `${path}/${id}`;
   const params = {
     content,
   };
@@ -34,7 +34,7 @@ describe(`POST ${path} API test :)`, () => {
   describe(`${HTTP_STATUS_CODE.INVALID_VALUE} test :)`, () => {
     it(`should error when require parameter is not exist.`, async () => {
       // when
-      const { body, status } = await request(app).patch(fullPath);
+      const { body, status } = await request(app).patch(fakePath);
 
       // then
       expect(status).toBe(HTTP_STATUS_CODE.INVALID_VALUE);
@@ -46,7 +46,7 @@ describe(`POST ${path} API test :)`, () => {
   describe(`${HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR} test :)`, () => {
     it(`should respond error.`, async () => {
       // when
-      const { body, status } = await request(app).patch(fullPath).send(params);
+      const { body, status } = await request(app).patch(fakePath).send(params);
 
       // then
       expect(status).toBe(HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR);
@@ -71,13 +71,16 @@ describe(`POST ${path} API test :)`, () => {
         content: "Test add content",
         date: "2024-01-01",
       };
-      await request(app).post(addToDoPath).send(addToDoParams);
+      const { body: addToDoBody } = await request(app).post(addToDoPath).send(addToDoParams);
+      const fullPath = `${path}/${addToDoBody.data.id}`;
 
       // when
       const { body, status } = await request(app).patch(fullPath).send(params);
       const todo = await ToDoRepository.findOneBy({
         id: body.data.id,
       });
+
+      console.log(todo);
 
       // then
       expect(status).toBe(HTTP_STATUS_CODE.OK);
@@ -90,6 +93,9 @@ describe(`POST ${path} API test :)`, () => {
         }),
       );
       expect(body.status).toEqual(RESPONSE_STATUS.SUCCESS);
+
+      const removeToDoPath = `/api/to-do/${body.data.id}`;
+      await request(app).delete(removeToDoPath);
     });
   });
 });

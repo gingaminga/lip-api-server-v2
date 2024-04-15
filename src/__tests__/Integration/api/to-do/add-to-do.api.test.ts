@@ -1,5 +1,4 @@
 import app from "@app";
-import ToDo from "@my-rdb/entities/to-do.entity";
 import { startRDB, stopRDB } from "@my-rdb/index";
 import { ToDoRepository } from "@my-rdb/repositories/to-do.repository";
 import { HTTP_STATUS_CODE, RESPONSE_STATUS } from "@utils/constants";
@@ -100,6 +99,9 @@ describe(`POST ${path} API test :)`, () => {
         }),
       );
       expect(body.status).toEqual(RESPONSE_STATUS.SUCCESS);
+
+      const removeToDoPath = `/api/to-do/${body.data.id}`;
+      await request(app).delete(removeToDoPath);
     });
   });
 });

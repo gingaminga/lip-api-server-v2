@@ -96,8 +96,8 @@ export const SOCIAL = {
 
 export const JWT = {
   EXPRIED: {
-    ACCESS_TOKEN: PROJECT.NODE_ENV === "development" ? "24h" : "24h",
-    REFRESH_TOKEN: PROJECT.NODE_ENV === "development" ? "35h" : "20d",
+    ACCESS_TOKEN: PROJECT.NODE_ENV === "development" ? "1h" : "24h",
+    REFRESH_TOKEN: PROJECT.NODE_ENV === "development" ? "24h" : "12d",
   },
   KEY: process.env.JWT_KEY || "",
 };

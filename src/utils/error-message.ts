@@ -7,6 +7,7 @@ const ERROR_MESSAGE = {
   NOT_FOUND: "Not found..",
   UNAUTHORIZED: "Unauthmorized..",
   UNKNOWN_ERROR: "Unknown error..",
+  UNKNOWN_TOKEN: "Unknown token..",
 };
 
 export default ERROR_MESSAGE;

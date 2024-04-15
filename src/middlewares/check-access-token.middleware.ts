@@ -1,7 +1,7 @@
 import { authService } from "@loaders/service.loader";
 import { ResponseDTO } from "@my-types/express.type";
 import { IOAuthJwtPayload } from "@my-types/jwt.type";
-import { HTTP_STATUS_CODE } from "@utils/constants";
+import { ERROR_CODE, HTTP_STATUS_CODE } from "@utils/constants";
 import CError from "@utils/error";
 import ERROR_MESSAGE from "@utils/error-message";
 import { verifyJWTToken } from "@utils/jwt";
@@ -32,10 +32,26 @@ export default async (req: Request, res: ResponseDTO, next: NextFunction) => {
     if (error instanceof CError) {
       throw error;
     } else if (error instanceof Error) {
-      if (error.message.startsWith("jwt malformed")) {
-        throw new CError(error, HTTP_STATUS_CODE.FORBIDDEN);
-      } else if (error.message.startsWith("jwt expired")) {
-        throw new CError(error, HTTP_STATUS_CODE.UNAUTHORIZED);
+      if (error.message.startsWith("jwt")) {
+        const data = {
+          code: ERROR_CODE.AUTH.UNKNOWN_TOKEN,
+        };
+
+        if (error.message.startsWith("jwt malformed")) {
+          data.code = ERROR_CODE.AUTH.UNKNOWN_TOKEN;
+        } else if (error.message.startsWith("jwt expired")) {
+          data.code = ERROR_CODE.AUTH.EXPIRED_TOKEN;
+        }
+
+        throw new CError(error, HTTP_STATUS_CODE.UNAUTHORIZED, data);
+      }
+
+      if (error.message.startsWith("invalid signature")) {
+        const data = {
+          code: ERROR_CODE.AUTH.INVALID_TOKEN,
+        };
+
+        throw new CError(error, HTTP_STATUS_CODE.UNAUTHORIZED, data);
       }
     }
 

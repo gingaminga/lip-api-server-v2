@@ -34,7 +34,7 @@ describe(`Check access token middleware test :)`, () => {
     }).rejects.toThrow(error);
   });
 
-  it(`should be ${HTTP_STATUS_CODE.FORBIDDEN} error when invalid token.`, () => {
+  it(`should be ${HTTP_STATUS_CODE.UNAUTHORIZED} error when invalid token.`, () => {
     // given
     req.headers.authorization = "Bearer 1234";
     const error = new Error("jwt malformed");

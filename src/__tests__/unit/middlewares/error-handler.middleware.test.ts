@@ -36,6 +36,6 @@ describe(`Error handler middleware test :)`, () => {
 
     // then
     expect(res.error).toHaveBeenCalled();
-    expect(res.error).toHaveBeenCalledWith(HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR, errorMessage);
+    expect(res.error).toHaveBeenCalledWith(HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR, errorMessage, undefined);
   });
 });

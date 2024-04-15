@@ -26,7 +26,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
     res.status(code).json(getResponseFormat(true, data));
   };
 
-  res.error = (code, errorMessage) => {
+  res.error = (code, errorMessage, data) => {
     let responseMessage = ERROR_MESSAGE.INTERNAL_SERVER_ERROR;
 
     switch (code) {
@@ -59,6 +59,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
     logger.error(stack);
 
     const response = {
+      ...data,
       message: responseMessage,
     };
 

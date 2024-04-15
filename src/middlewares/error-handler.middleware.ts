@@ -16,8 +16,8 @@ export default (error: unknown, _req: Request, res: Response, _: NextFunction) =
     return;
   }
 
-  const { code, message } = new CError(error);
+  const { code, data, message } = new CError(error);
 
   const errorMessage = `Catched error with ${code} code.. ${message}`;
-  res.error(code, errorMessage);
+  res.error(code, errorMessage, data);
 };

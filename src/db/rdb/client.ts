@@ -10,11 +10,11 @@ class RelationDBClient extends DataSource {
    * @description 시작하기
    */
   async start() {
-    await this.initialize();
     await createDatabase({
       ifNotExist: true,
       options: relationDBOption,
     });
+    await this.initialize();
 
     logger.info(`${RELATION_DB.TYPE} connect ${colors.green("success")} :)`);
   }

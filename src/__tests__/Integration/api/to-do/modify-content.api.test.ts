@@ -80,8 +80,6 @@ describe(`POST ${path} API test :)`, () => {
         id: body.data.id,
       });
 
-      console.log(todo);
-
       // then
       expect(status).toBe(HTTP_STATUS_CODE.OK);
       expect(todo).not.toBeNull();

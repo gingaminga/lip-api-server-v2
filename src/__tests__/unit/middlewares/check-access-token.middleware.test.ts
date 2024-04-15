@@ -51,7 +51,7 @@ describe(`Check access token middleware test :)`, () => {
       nickname: "test",
     };
     const token = createJWTToken(payload, {
-      expiresIn: "1s",
+      expiresIn: "1",
     });
 
     req.headers.authorization = `Bearer ${token}`;
@@ -59,9 +59,6 @@ describe(`Check access token middleware test :)`, () => {
 
     // when & then
     expect(async () => {
-      await new Promise((resolve) => {
-        setTimeout(() => resolve(true), 1500);
-      });
       await checkAccessTokenMiddleware(req, res, next);
     }).rejects.toThrow(error);
   });

@@ -69,7 +69,7 @@ describe(`[Auth service] socialLogin method test :)`, () => {
     }).rejects.toThrow(error);
   });
 
-  it(`should be error by generate oauth token.`, async () => {
+  it(`should be success.`, async () => {
     // given
     const user = {
       createdAt: new Date(),
@@ -92,8 +92,9 @@ describe(`[Auth service] socialLogin method test :)`, () => {
     const result = await authService.socialLogin(type, code);
 
     // then
+    const { socialKey, ...otherUser } = user;
     expect(result.accessToken).toBe(tokens.accessToken);
     expect(result.refreshToken).toBe(tokens.refreshToken);
-    expect(result.userInfo).toEqual(user);
+    expect(result.userInfo).toEqual(otherUser);
   });
 });

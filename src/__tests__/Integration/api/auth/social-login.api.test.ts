@@ -116,7 +116,6 @@ describe(`POST ${path} API test :)`, () => {
       expect(status).toBe(HTTP_STATUS_CODE.CREATED);
       expect(body.status).toEqual(RESPONSE_STATUS.SUCCESS);
       expect(body.data.userInfo.email).toBe(mockUser.email);
-      expect(body.data.userInfo.socialKey).toBe(mockUser.socialKey);
       expect(body.data.userInfo.socialType).toBe(mockUser.socialType);
       expect(body.data.accessToken).toBeDefined();
       expect(body.data.refreshToken).toBeDefined();
@@ -153,7 +152,6 @@ describe(`POST ${path} API test :)`, () => {
       expect(status).toBe(HTTP_STATUS_CODE.CREATED);
       expect(body.status).toEqual(RESPONSE_STATUS.SUCCESS);
       expect(body.data.userInfo.email).toBe(mockUser.email);
-      expect(body.data.userInfo.socialKey).toBe(mockUser.socialKey);
       expect(body.data.userInfo.socialType).toBe(mockUser.socialType);
       expect(body.data.accessToken).toBeDefined();
       expect(body.data.refreshToken).toBeDefined();
@@ -188,7 +186,6 @@ describe(`POST ${path} API test :)`, () => {
       expect(status).toBe(HTTP_STATUS_CODE.CREATED);
       expect(body.status).toEqual(RESPONSE_STATUS.SUCCESS);
       expect(body.data.userInfo.email).toBe(mockUser.email);
-      expect(body.data.userInfo.socialKey).toBe(mockUser.socialKey);
       expect(body.data.userInfo.socialType).toBe(mockUser.socialType);
       expect(body.data.accessToken).toBeDefined();
       expect(body.data.refreshToken).toBeDefined();

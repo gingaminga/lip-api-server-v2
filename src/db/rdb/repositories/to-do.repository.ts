@@ -4,14 +4,18 @@ import ToDo from "@my-rdb/entities/to-do.entity";
 export const ToDoRepository = rdbUtil.getRepository(ToDo).extend({
   /**
    * @description 할 일 내용 수정하기
-   * @param id
+   * @param toDoID
    * @param content 내용
+   * @param userID
    * @returns true (수정) / false (수정 실패)
    */
-  async modifyContent(id: number, content: string) {
+  async modifyContent(toDoID: number, content: string, userID: number) {
     const result = await this.update(
       {
-        id,
+        id: toDoID,
+        user: {
+          id: userID,
+        },
       },
       {
         content,

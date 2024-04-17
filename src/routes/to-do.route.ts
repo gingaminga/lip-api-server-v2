@@ -13,7 +13,7 @@ const router = asyncify(Router());
 
 router.get("/all", getAllToDoController);
 router.post("/", checkAccessTokenMiddleware, addToDoValidator, addToDoController);
-router.patch("/content/:id", modifyContentValidator, modifyContentController);
+router.patch("/content/:id", checkAccessTokenMiddleware, modifyContentValidator, modifyContentController);
 router.delete("/:id", removeToDoValidator, removeToDoController);
 
 export default router;

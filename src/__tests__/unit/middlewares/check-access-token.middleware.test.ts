@@ -92,23 +92,21 @@ describe(`Check access token middleware test :)`, () => {
     });
     req.headers.authorization = `Bearer ${token}`;
 
-    const user: User = {
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      deletedAt: null,
-      email: "test@test.com",
-      id: 1,
-      nickname: "test",
-      socialKey: `kakao-123412341234`,
-      socialType: "kakao",
-    };
-    jest.spyOn(authService, "getUserInfoByNickname").mockResolvedValue(user);
+    const mockedUser = new User();
+    mockedUser.id = 1;
+    mockedUser.email = "test@test.com";
+    mockedUser.nickname = "test";
+    mockedUser.createdAt = new Date();
+    mockedUser.socialKey = "kakao-123412341234";
+    mockedUser.socialType = "kakao";
+
+    jest.spyOn(authService, "getUserInfoByNickname").mockResolvedValue(mockedUser);
 
     // when
     await checkAccessTokenMiddleware(req, res, next);
 
     // then
-    expect(res.locals.userInfo).toBe(user);
+    expect(res.locals.userInfo).toBe(mockedUser);
     expect(next).toHaveBeenCalled();
   });
 });

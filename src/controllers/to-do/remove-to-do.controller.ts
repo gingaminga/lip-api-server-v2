@@ -6,9 +6,10 @@ import { RequestDTOHandler } from "@my-types/express.type";
  * @description 할 일 삭제하는 컨트롤러
  */
 export const removeToDoController: RequestDTOHandler<RemoveToDoParamDTO> = async (_req, res) => {
-  const { id } = res.locals.requestDTO;
+  const { requestDTO, userInfo } = res.locals;
+  const { id } = requestDTO;
 
-  const response = await toDoService.remove(id);
+  const response = await toDoService.remove(id, userInfo);
 
   res.result(response);
 };

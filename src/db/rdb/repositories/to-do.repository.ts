@@ -30,12 +30,16 @@ export const ToDoRepository = rdbUtil.getRepository(ToDo).extend({
   },
   /**
    * @description 할 일 삭제하기
-   * @param id
+   * @param toDoID
+   * @param userID
    * @returns true (삭제) / false (삭제 실패)
    */
-  async remove(id: number) {
+  async remove(toDoID: number, userID: number) {
     const result = await this.softDelete({
-      id,
+      id: toDoID,
+      user: {
+        id: userID,
+      },
     });
 
     if (result.affected && result.affected > 0) {

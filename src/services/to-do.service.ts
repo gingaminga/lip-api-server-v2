@@ -1,6 +1,6 @@
-import RemoveToDoDTO from "@dto/remove-to-do.dto";
 import AddToDoResponseDTO from "@dto/responses/to-do/add-to-do.response.dto";
 import ModifyContentResponseDTO from "@dto/responses/to-do/modify-content.response.dto";
+import RemoveToDoResponseDTO from "@dto/responses/to-do/remove-to-do.response.dto";
 import ToDo from "@my-rdb/entities/to-do.entity";
 import User from "@my-rdb/entities/user.entity";
 import { ToDoRepository } from "@my-rdb/repositories/to-do.repository";
@@ -11,7 +11,7 @@ export interface IToDoService {
   add(content: string, date: string, userInfo: User): Promise<AddToDoResponseDTO>;
   getAll(): Promise<ToDo[]>;
   modifyContent(id: number, content: string, userInfo: User): Promise<ModifyContentResponseDTO>;
-  remove(id: number): Promise<RemoveToDoDTO>;
+  remove(id: number, userInfo: User): Promise<RemoveToDoResponseDTO>;
 }
 
 @injectable()
@@ -74,13 +74,14 @@ export class ToDoService implements IToDoService {
 
   /**
    * @description 할 일 삭제하기
-   * @param id
+   * @param toDoID
+   * @param userInfo 유저 정보
    */
-  async remove(id: number) {
-    const isSuccess = await this.toDoRepository.remove(id);
-    const removeId = isSuccess ? id : -1;
+  async remove(toDoID: number, userInfo: User) {
+    const isSuccess = await this.toDoRepository.remove(toDoID, userInfo.id);
+    const removeId = isSuccess ? toDoID : -1;
 
-    const dto = new RemoveToDoDTO(removeId);
+    const dto = new RemoveToDoResponseDTO(removeId);
 
     return dto;
   }

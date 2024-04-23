@@ -1,4 +1,4 @@
-class RemoveToDoDTO {
+class RemoveToDoResponseDTO {
   id: number;
 
   constructor(id: number) {
@@ -6,4 +6,4 @@ class RemoveToDoDTO {
   }
 }
 
-export default RemoveToDoDTO;
+export default RemoveToDoResponseDTO;

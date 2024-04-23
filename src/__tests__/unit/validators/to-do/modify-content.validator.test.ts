@@ -1,6 +1,5 @@
 import ModifyContentParamDTO from "@dto/params/to-do/modify-content.param.dto";
 import { ResponseDTO } from "@my-types/express.type";
-import { addToDoSchema, addToDoValidator } from "@validators/to-do/add-to-do.validator";
 import {
   modifyContentBodySchema,
   modifyContentPathSchema,

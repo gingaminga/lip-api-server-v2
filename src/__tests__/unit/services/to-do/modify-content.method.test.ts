@@ -1,4 +1,5 @@
 import ToDo from "@my-rdb/entities/to-do.entity";
+import User from "@my-rdb/entities/user.entity";
 import { ToDoRepository } from "@my-rdb/repositories/to-do.repository";
 import { ToDoService } from "@services/to-do.service";
 
@@ -9,6 +10,13 @@ describe(`[ToDo service] modifyContent method test :)`, () => {
   const toDoService = new ToDoService(mockedToDoRepository);
   const id = 1;
   const content = "new content";
+  const mockedUser = new User();
+  mockedUser.id = 1;
+  mockedUser.email = "test@test.com";
+  mockedUser.nickname = "test";
+  mockedUser.createdAt = new Date();
+  mockedUser.socialKey = "test-1234";
+  mockedUser.socialType = "kakao";
 
   it(`should be error by modifyContent method of toDoRepository.`, async () => {
     // given
@@ -17,7 +25,7 @@ describe(`[ToDo service] modifyContent method test :)`, () => {
 
     // when & then
     expect(async () => {
-      await toDoService.modifyContent(id, content);
+      await toDoService.modifyContent(id, content, mockedUser);
     }).rejects.toThrow(error);
     expect(mockedToDoRepository.findOneByOrFail).not.toHaveBeenCalled();
   });
@@ -31,7 +39,7 @@ describe(`[ToDo service] modifyContent method test :)`, () => {
 
     // when & then
     expect(async () => {
-      await toDoService.modifyContent(id, content);
+      await toDoService.modifyContent(id, content, mockedUser);
     }).rejects.toThrow(error);
   });
 
@@ -44,9 +52,9 @@ describe(`[ToDo service] modifyContent method test :)`, () => {
     mockedToDoRepository.findOneByOrFail.mockResolvedValue(toDo);
 
     // when
-    const newToDo = await toDoService.modifyContent(id, content);
+    const newToDo = await toDoService.modifyContent(id, content, mockedUser);
 
     // then
-    expect(newToDo).toEqual(toDo);
+    expect(newToDo.toDoInfo).toEqual(toDo);
   });
 });

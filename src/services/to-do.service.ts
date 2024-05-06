@@ -1,4 +1,5 @@
 import AddToDoResponseDTO from "@dto/responses/to-do/add-to-do.response.dto";
+import CheckToDoResponseDTO from "@dto/responses/to-do/check-to-do.response.dto";
 import ModifyContentResponseDTO from "@dto/responses/to-do/modify-content.response.dto";
 import RemoveToDoResponseDTO from "@dto/responses/to-do/remove-to-do.response.dto";
 import ToDo from "@my-rdb/entities/to-do.entity";
@@ -12,6 +13,7 @@ export interface IToDoService {
   getAll(): Promise<ToDo[]>;
   modifyContent(id: number, content: string, userInfo: User): Promise<ModifyContentResponseDTO>;
   remove(id: number, userInfo: User): Promise<RemoveToDoResponseDTO>;
+  yn(toDoID: number, isChecked: boolean, userInfo: User): Promise<CheckToDoResponseDTO>;
 }
 
 @injectable()
@@ -82,6 +84,27 @@ export class ToDoService implements IToDoService {
     const removeId = isSuccess ? toDoID : -1;
 
     const dto = new RemoveToDoResponseDTO(removeId);
+
+    return dto;
+  }
+
+  /**
+   * @description 할 일 완료 여부 처리하기
+   * @param toDoID
+   * @param isChecked 완료 여부
+   * @param userInfo 유저 정보
+   */
+  async yn(toDoID: number, isChecked: boolean, userInfo: User) {
+    await this.toDoRepository.modifyChecked(toDoID, isChecked, userInfo.id);
+
+    const todo = await this.toDoRepository.findOneByOrFail({
+      id: toDoID,
+      user: {
+        id: userInfo.id,
+      },
+    });
+
+    const dto = new CheckToDoResponseDTO(todo);
 
     return dto;
   }

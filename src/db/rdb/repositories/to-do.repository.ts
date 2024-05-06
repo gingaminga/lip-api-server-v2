@@ -29,6 +29,32 @@ export const ToDoRepository = rdbUtil.getRepository(ToDo).extend({
     return false;
   },
   /**
+   * @description 할 일 완료 여부 수정하기
+   * @param toDoID
+   * @param isChecked 완료 여부
+   * @param userID
+   * @returns true (수정) / false (수정 실패)
+   */
+  async modifyChecked(toDoID: number, isChecked: boolean, userID: number) {
+    const result = await this.update(
+      {
+        id: toDoID,
+        user: {
+          id: userID,
+        },
+      },
+      {
+        checked: isChecked ? "Y" : "N",
+      },
+    );
+
+    if (result.affected && result.affected > 0) {
+      return true;
+    }
+
+    return false;
+  },
+  /**
    * @description 할 일 삭제하기
    * @param toDoID
    * @param userID

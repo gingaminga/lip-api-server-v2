@@ -3,6 +3,16 @@ export interface IAddToDoParam {
   date: string;
 }
 
+export interface ICheckToDoBodyParam {
+  isChecked: boolean;
+}
+
+export interface ICheckToDoPathParam {
+  id: number;
+}
+
+export interface ICheckToDoParam extends ICheckToDoBodyParam, ICheckToDoPathParam {}
+
 export interface IModifyContentBodyParam {
   content: string;
 }

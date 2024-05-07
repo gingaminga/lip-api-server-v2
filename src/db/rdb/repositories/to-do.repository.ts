@@ -1,7 +1,31 @@
 import { rdbUtil } from "@loaders/util.loader";
 import ToDo from "@my-rdb/entities/to-do.entity";
+import { Between, FindOptionsRelations } from "typeorm";
 
 export const ToDoRepository = rdbUtil.getRepository(ToDo).extend({
+  /**
+   *
+   * @param startDate 시작 날짜
+   * @param endDate 끝 날짜
+   * @param userID
+   * @param relations 관계형 옵션
+   */
+  async getToDo(startDate: string, endDate: string, userID: number, relations: FindOptionsRelations<ToDo>) {
+    const toDos = await this.find({
+      relations,
+      where: {
+        date: Between(startDate, endDate),
+        user: {
+          id: userID,
+        },
+      },
+      order: {
+        date: "ASC",
+      },
+    });
+
+    return toDos;
+  },
   /**
    * @description 할 일 내용 수정하기
    * @param toDoID

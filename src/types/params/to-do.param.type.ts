@@ -13,6 +13,11 @@ export interface ICheckToDoPathParam {
 
 export interface ICheckToDoParam extends ICheckToDoBodyParam, ICheckToDoPathParam {}
 
+export interface IGetToDoParam {
+  endDate: string;
+  startDate: string;
+}
+
 export interface IModifyContentBodyParam {
   content: string;
 }

@@ -36,6 +36,7 @@ export const ToDoRepository = rdbUtil.getRepository(ToDo).extend({
   async modifyContent(toDoID: number, content: string, userID: number) {
     const result = await this.update(
       {
+        deletedAt: IsNull(),
         id: toDoID,
         user: {
           id: userID,
@@ -89,6 +90,7 @@ export const ToDoRepository = rdbUtil.getRepository(ToDo).extend({
   async modifyChecked(toDoID: number, isChecked: boolean, userID: number) {
     const result = await this.update(
       {
+        deletedAt: IsNull(),
         id: toDoID,
         user: {
           id: userID,

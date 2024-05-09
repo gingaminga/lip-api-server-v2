@@ -28,6 +28,16 @@ export interface IModifyContentPathParam {
 
 export interface IModifyContentParam extends IModifyContentBodyParam, IModifyContentPathParam {}
 
+export interface IModifyMemoBodyParam {
+  memo: string;
+}
+
+export interface IModifyMemoPathParam {
+  id: number;
+}
+
+export interface IModifyMemoParam extends IModifyMemoBodyParam, IModifyMemoPathParam {}
+
 export interface IRemoveToDoParam {
   id: number;
 }

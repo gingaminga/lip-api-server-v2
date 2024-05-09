@@ -30,6 +30,14 @@ class ToDo {
   content!: string;
 
   @Column({
+    comment: "할 일의 추가 설명(메모)",
+    default: null,
+    length: 500,
+    type: "varchar",
+  })
+  memo!: string;
+
+  @Column({
     comment: "날짜",
     length: 10,
     type: "char",

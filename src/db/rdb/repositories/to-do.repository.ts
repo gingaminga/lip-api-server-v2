@@ -1,6 +1,6 @@
 import { rdbUtil } from "@loaders/util.loader";
 import ToDo from "@my-rdb/entities/to-do.entity";
-import { Between, FindOptionsRelations } from "typeorm";
+import { Between, FindOptionsRelations, IsNull } from "typeorm";
 
 export const ToDoRepository = rdbUtil.getRepository(ToDo).extend({
   /**
@@ -43,6 +43,33 @@ export const ToDoRepository = rdbUtil.getRepository(ToDo).extend({
       },
       {
         content,
+      },
+    );
+
+    if (result.affected && result.affected > 0) {
+      return true;
+    }
+
+    return false;
+  },
+  /**
+   * @description 할 일 메모 수정하기
+   * @param toDoID
+   * @param memo 메모 내용
+   * @param userID
+   * @returns true (수정) / false (수정 실패)
+   */
+  async modifyMemo(toDoID: number, memo: string, userID: number) {
+    const result = await this.update(
+      {
+        deletedAt: IsNull(),
+        id: toDoID,
+        user: {
+          id: userID,
+        },
+      },
+      {
+        memo,
       },
     );
 

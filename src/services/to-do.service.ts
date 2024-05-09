@@ -2,6 +2,7 @@ import AddToDoResponseDTO from "@dto/responses/to-do/add-to-do.response.dto";
 import CheckToDoResponseDTO from "@dto/responses/to-do/check-to-do.response.dto";
 import GetToDoResponseDTO from "@dto/responses/to-do/get-to-do.response.dto";
 import ModifyContentResponseDTO from "@dto/responses/to-do/modify-content.response.dto";
+import ModifyMemoResponseDTO from "@dto/responses/to-do/modify-memo.response.dto";
 import RemoveToDoResponseDTO from "@dto/responses/to-do/remove-to-do.response.dto";
 import ToDo from "@my-rdb/entities/to-do.entity";
 import User from "@my-rdb/entities/user.entity";
@@ -13,6 +14,7 @@ export interface IToDoService {
   add(content: string, date: string, userInfo: User): Promise<AddToDoResponseDTO>;
   get(startDate: string, endDate: string, userInfo: User): Promise<GetToDoResponseDTO>;
   modifyContent(id: number, content: string, userInfo: User): Promise<ModifyContentResponseDTO>;
+  modifyMemo(id: number, memo: string, userInfo: User): Promise<ModifyMemoResponseDTO>;
   remove(id: number, userInfo: User): Promise<RemoveToDoResponseDTO>;
   yn(toDoID: number, isChecked: boolean, userInfo: User): Promise<CheckToDoResponseDTO>;
 }
@@ -79,6 +81,27 @@ export class ToDoService implements IToDoService {
     });
 
     const dto = new ModifyContentResponseDTO(todo);
+
+    return dto;
+  }
+
+  /**
+   * @description 할 일 메모 수정하기
+   * @param toDoID
+   * @param memo 할 일 메모
+   * @param userInfo 유저 정보
+   */
+  async modifyMemo(toDoID: number, memo: string, userInfo: User) {
+    await this.toDoRepository.modifyMemo(toDoID, memo, userInfo.id);
+
+    const todo = await this.toDoRepository.findOneByOrFail({
+      id: toDoID,
+      user: {
+        id: userInfo.id,
+      },
+    });
+
+    const dto = new ModifyMemoResponseDTO(todo);
 
     return dto;
   }

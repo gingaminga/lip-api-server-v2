@@ -112,7 +112,7 @@ describe(`POST ${path} API test :)`, () => {
       // then
       expect(status).toBe(HTTP_STATUS_CODE.OK);
       expect(todo).not.toBeNull();
-      expect(body.data).toEqual(
+      expect(body.data.toDoInfo).toEqual(
         expect.objectContaining({
           ...todo,
           createdAt: body.data.toDoInfo.createdAt.toString(),

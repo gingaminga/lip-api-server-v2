@@ -1,3 +1,4 @@
+import Routine from "@my-rdb/entities/routine.entity";
 import ToDo from "@my-rdb/entities/to-do.entity";
 import { TSocialType } from "@my-types/social.type";
 import {
@@ -63,6 +64,9 @@ class User {
 
   @OneToMany(() => ToDo, (toDo) => toDo.user)
   toDos!: ToDo[];
+
+  @OneToMany(() => Routine, (routine) => routine.user)
+  routines!: Routine[];
 }
 
 export default User;

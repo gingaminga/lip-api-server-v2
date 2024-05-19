@@ -1,6 +1,10 @@
 import AddRoutineByDaysParamDTO from "@dto/params/routine/add-routine-by-days.param.dto";
 import AddRoutineByEveryParamDTO from "@dto/params/routine/add-routine-by-every.param.dto";
+import ModifyRoutineByDaysParamDTO from "@dto/params/routine/modify-routine-by-days.param.dto";
+import ModifyRoutineByEveryParamDTO from "@dto/params/routine/modify-routine-by-every.param.dto";
 import AddRoutineResponseDTO from "@dto/responses/routine/add-routine.response.dto";
+import ModifyRoutineResponseDTO from "@dto/responses/routine/modify-routine.response.dto";
+import { rdbUtil } from "@loaders/util.loader";
 import RoutineCycleDays from "@my-rdb/entities/routine-cycle-days.entity";
 import RoutineCycleEvery from "@my-rdb/entities/routine-cycle-every.entity";
 import Routine from "@my-rdb/entities/routine.entity";
@@ -15,6 +19,8 @@ import { inject, injectable } from "inversify";
 export interface IRoutineService {
   addRoutineByDays(dto: AddRoutineByDaysParamDTO, userInfo: User): Promise<AddRoutineResponseDTO>;
   addRoutineByEvery(dto: AddRoutineByEveryParamDTO, userInfo: User): Promise<AddRoutineResponseDTO>;
+  modifyRoutineByDays(dto: ModifyRoutineByDaysParamDTO, userInfo: User): Promise<ModifyRoutineResponseDTO>;
+  modifyRoutineByEvery(dto: ModifyRoutineByEveryParamDTO, userInfo: User): Promise<ModifyRoutineResponseDTO>;
 }
 
 @injectable()
@@ -83,5 +89,114 @@ export class RoutineService implements IRoutineService {
 
     const dto = new AddRoutineResponseDTO(newRoutine);
     return dto;
+  }
+
+  async modifyRoutineByDays(params: ModifyRoutineByDaysParamDTO, userInfo: User) {
+    const { color, days, description = null, endDate = null, id, startDate, title } = params;
+    const { friday, monday, saturday, sunday, thursday, tuesday, wednesday } = getExistDay(days);
+
+    return rdbUtil.transaction(async (manager) => {
+      const routineRepository = manager.withRepository(this.routineRepository);
+      const routineCycleEveryRepository = manager.withRepository(this.routineCycleEveryRepository);
+
+      const currentRoutine = await routineRepository.findOne({
+        where: {
+          id,
+          user: {
+            id: userInfo.id,
+          },
+        },
+        relations: {
+          routineCycleDays: true,
+          routineCycleEvery: true,
+        },
+      });
+
+      const routineCycleDays = new RoutineCycleDays();
+      routineCycleDays.monday = monday;
+      routineCycleDays.tuesday = tuesday;
+      routineCycleDays.wednesday = wednesday;
+      routineCycleDays.thursday = thursday;
+      routineCycleDays.friday = friday;
+      routineCycleDays.saturday = saturday;
+      routineCycleDays.sunday = sunday;
+
+      if (currentRoutine?.routineCycleDays) {
+        routineCycleDays.id = currentRoutine.routineCycleDays.id;
+      }
+
+      const routine = new Routine();
+      routine.id = id;
+      routine.title = title;
+      routine.description = description;
+      routine.color = color;
+      routine.startDate = startDate;
+      routine.endDate = endDate;
+      routine.user = userInfo;
+      routine.routineCycleDays = routineCycleDays;
+      routine.routineCycleEvery = null;
+
+      const routineInfo = await this.routineRepository.save(routine);
+
+      if (currentRoutine?.routineCycleEvery) {
+        await routineCycleEveryRepository.softDelete({
+          id: currentRoutine.routineCycleEvery.id,
+        });
+      }
+
+      const dto = new ModifyRoutineResponseDTO(routineInfo);
+      return dto;
+    });
+  }
+
+  async modifyRoutineByEvery(params: ModifyRoutineByEveryParamDTO, userInfo: User) {
+    const { color, description = null, endDate = null, every, id, startDate, title } = params;
+
+    return rdbUtil.transaction(async (manager) => {
+      const routineRepository = manager.withRepository(this.routineRepository);
+      const routineCycleDaysRepository = manager.withRepository(this.routineCycleDaysRepository);
+
+      const currentRoutine = await routineRepository.findOne({
+        where: {
+          id,
+          user: {
+            id: userInfo.id,
+          },
+        },
+        relations: {
+          routineCycleDays: true,
+          routineCycleEvery: true,
+        },
+      });
+
+      const routineCycleEvery = new RoutineCycleEvery();
+      routineCycleEvery.every = every;
+
+      if (currentRoutine?.routineCycleEvery) {
+        routineCycleEvery.id = currentRoutine.routineCycleEvery.id;
+      }
+
+      const routine = new Routine();
+      routine.id = id;
+      routine.title = title;
+      routine.description = description;
+      routine.color = color;
+      routine.startDate = startDate;
+      routine.endDate = endDate;
+      routine.user = userInfo;
+      routine.routineCycleDays = null;
+      routine.routineCycleEvery = routineCycleEvery;
+
+      const routineInfo = await this.routineRepository.save(routine);
+
+      if (currentRoutine?.routineCycleDays) {
+        await routineCycleDaysRepository.softDelete({
+          id: currentRoutine.routineCycleDays.id,
+        });
+      }
+
+      const dto = new ModifyRoutineResponseDTO(routineInfo);
+      return dto;
+    });
   }
 }

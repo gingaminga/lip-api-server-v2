@@ -13,3 +13,11 @@ export interface IAddRoutineByDaysParam extends IAddCommonRoutineParam {
 export interface IAddRoutineByEveryParam extends IAddCommonRoutineParam {
   every: number; // 주기
 }
+
+export interface IModifyRoutineByDaysParam extends IAddRoutineByDaysParam {
+  id: number;
+}
+
+export interface IModifyRoutineByEveryParam extends IAddRoutineByEveryParam {
+  id: number;
+}

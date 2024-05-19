@@ -102,17 +102,9 @@ export class RoutineService implements IRoutineService {
       const routineRepository = manager.withRepository(this.routineRepository);
       const routineCycleEveryRepository = manager.withRepository(this.routineCycleEveryRepository);
 
-      const currentRoutine = await routineRepository.findOne({
-        where: {
-          id,
-          user: {
-            id: userInfo.id,
-          },
-        },
-        relations: {
-          routineCycleDays: true,
-          routineCycleEvery: true,
-        },
+      const currentRoutine = await routineRepository.findRoutine(id, userInfo.id, {
+        routineCycleDays: true,
+        routineCycleEvery: true,
       });
 
       const routineCycleDays = new RoutineCycleDays();
@@ -159,17 +151,9 @@ export class RoutineService implements IRoutineService {
       const routineRepository = manager.withRepository(this.routineRepository);
       const routineCycleDaysRepository = manager.withRepository(this.routineCycleDaysRepository);
 
-      const currentRoutine = await routineRepository.findOne({
-        where: {
-          id,
-          user: {
-            id: userInfo.id,
-          },
-        },
-        relations: {
-          routineCycleDays: true,
-          routineCycleEvery: true,
-        },
+      const currentRoutine = await routineRepository.findRoutine(id, userInfo.id, {
+        routineCycleDays: true,
+        routineCycleEvery: true,
       });
 
       const routineCycleEvery = new RoutineCycleEvery();
@@ -211,17 +195,9 @@ export class RoutineService implements IRoutineService {
       const routineCycleDaysRepository = manager.withRepository(this.routineCycleDaysRepository);
       const routineCycleEveryRepository = manager.withRepository(this.routineCycleEveryRepository);
 
-      const currentRoutine = await routineRepository.findOne({
-        where: {
-          id,
-          user: {
-            id: userInfo.id,
-          },
-        },
-        relations: {
-          routineCycleDays: true,
-          routineCycleEvery: true,
-        },
+      const currentRoutine = await routineRepository.findRoutine(id, userInfo.id, {
+        routineCycleDays: true,
+        routineCycleEvery: true,
       });
 
       if (currentRoutine?.routineCycleDays) {

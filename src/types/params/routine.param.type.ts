@@ -21,3 +21,7 @@ export interface IModifyRoutineByDaysParam extends IAddRoutineByDaysParam {
 export interface IModifyRoutineByEveryParam extends IAddRoutineByEveryParam {
   id: number;
 }
+
+export interface IRemoveRoutineParam {
+  id: number;
+}

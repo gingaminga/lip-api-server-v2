@@ -2,8 +2,10 @@ import AddRoutineByDaysParamDTO from "@dto/params/routine/add-routine-by-days.pa
 import AddRoutineByEveryParamDTO from "@dto/params/routine/add-routine-by-every.param.dto";
 import ModifyRoutineByDaysParamDTO from "@dto/params/routine/modify-routine-by-days.param.dto";
 import ModifyRoutineByEveryParamDTO from "@dto/params/routine/modify-routine-by-every.param.dto";
+import RemoveRoutineParamDTO from "@dto/params/routine/remove-routine.param.dto";
 import AddRoutineResponseDTO from "@dto/responses/routine/add-routine.response.dto";
 import ModifyRoutineResponseDTO from "@dto/responses/routine/modify-routine.response.dto";
+import RemoveRoutineResponseDTO from "@dto/responses/routine/remove-routine.response.dto";
 import { rdbUtil } from "@loaders/util.loader";
 import RoutineCycleDays from "@my-rdb/entities/routine-cycle-days.entity";
 import RoutineCycleEvery from "@my-rdb/entities/routine-cycle-every.entity";
@@ -21,6 +23,7 @@ export interface IRoutineService {
   addRoutineByEvery(dto: AddRoutineByEveryParamDTO, userInfo: User): Promise<AddRoutineResponseDTO>;
   modifyRoutineByDays(dto: ModifyRoutineByDaysParamDTO, userInfo: User): Promise<ModifyRoutineResponseDTO>;
   modifyRoutineByEvery(dto: ModifyRoutineByEveryParamDTO, userInfo: User): Promise<ModifyRoutineResponseDTO>;
+  remove(dto: RemoveRoutineParamDTO, userInfo: User): Promise<RemoveRoutineResponseDTO>;
 }
 
 @injectable()
@@ -196,6 +199,43 @@ export class RoutineService implements IRoutineService {
       }
 
       const dto = new ModifyRoutineResponseDTO(routineInfo);
+      return dto;
+    });
+  }
+
+  async remove(params: RemoveRoutineParamDTO, userInfo: User) {
+    const { id } = params;
+
+    return rdbUtil.transaction(async (manager) => {
+      const routineRepository = manager.withRepository(this.routineRepository);
+      const routineCycleDaysRepository = manager.withRepository(this.routineCycleDaysRepository);
+      const routineCycleEveryRepository = manager.withRepository(this.routineCycleEveryRepository);
+
+      const currentRoutine = await routineRepository.findOne({
+        where: {
+          id,
+          user: {
+            id: userInfo.id,
+          },
+        },
+        relations: {
+          routineCycleDays: true,
+          routineCycleEvery: true,
+        },
+      });
+
+      if (currentRoutine?.routineCycleDays) {
+        await routineCycleDaysRepository.remove(currentRoutine.routineCycleDays.id);
+      }
+
+      if (currentRoutine?.routineCycleEvery) {
+        await routineCycleEveryRepository.remove(currentRoutine.routineCycleEvery.id);
+      }
+
+      const isSuccess = await this.routineRepository.remove(id, userInfo.id);
+      const removeID = isSuccess ? id : -1;
+
+      const dto = new RemoveRoutineResponseDTO(removeID);
       return dto;
     });
   }

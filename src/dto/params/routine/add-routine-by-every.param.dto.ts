@@ -1,25 +1,13 @@
+import AddCommonRoutineParamDTO from "@dto/params/routine/add-routine-common.param.dto";
 import { IAddRoutineByEveryParam } from "@my-types/params/routine.param.type";
 
-class AddRoutineByEveryParamDTO {
-  color: string;
-
-  description?: string;
-
-  endDate?: string;
-
+class AddRoutineByEveryParamDTO extends AddCommonRoutineParamDTO {
   every: number;
 
-  startDate: string;
+  constructor({ every, ...dto }: IAddRoutineByEveryParam) {
+    super(dto);
 
-  title: string;
-
-  constructor({ color, description, endDate, every, startDate, title }: IAddRoutineByEveryParam) {
-    this.color = color;
-    this.description = description;
-    this.endDate = endDate;
     this.every = every;
-    this.startDate = startDate;
-    this.title = title;
   }
 }
 

@@ -1,4 +1,4 @@
-export interface ICommonAddRoutineParam {
+export interface IAddCommonRoutineParam {
   color: string;
   description?: string;
   endDate?: string;
@@ -6,10 +6,10 @@ export interface ICommonAddRoutineParam {
   title: string;
 }
 
-export interface IAddRoutineByDaysParam extends ICommonAddRoutineParam {
+export interface IAddRoutineByDaysParam extends IAddCommonRoutineParam {
   days: string; // 요일
 }
 
-export interface IAddRoutineByEveryParam extends ICommonAddRoutineParam {
+export interface IAddRoutineByEveryParam extends IAddCommonRoutineParam {
   every: number; // 주기
 }

@@ -82,11 +82,11 @@ export default class Routine {
     cascade: true,
   })
   @JoinColumn()
-  routineCycleDays!: RoutineCycleDays;
+  routineCycleDays!: RoutineCycleDays | null;
 
   @OneToOne(() => RoutineCycleEvery, (routineCycleEvery) => routineCycleEvery.routine, {
     cascade: true,
   })
   @JoinColumn()
-  routineCycleEvery!: RoutineCycleEvery;
+  routineCycleEvery!: RoutineCycleEvery | null;
 }

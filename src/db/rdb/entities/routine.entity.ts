@@ -1,5 +1,6 @@
 import RoutineCycleDays from "@my-rdb/entities/routine-cycle-days.entity";
 import RoutineCycleEvery from "@my-rdb/entities/routine-cycle-every.entity";
+import RoutineToDo from "@my-rdb/entities/routine-to-do.entity";
 import User from "@my-rdb/entities/user.entity";
 import {
   Column,
@@ -8,6 +9,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -77,6 +79,9 @@ export default class Routine {
     nullable: false,
   })
   user!: User;
+
+  @OneToMany(() => RoutineToDo, (routineToDo) => routineToDo.routine)
+  routineToDos!: RoutineToDo[];
 
   @OneToOne(() => RoutineCycleDays, (routineCycleDays) => routineCycleDays.routine, {
     cascade: true,

@@ -1,10 +1,12 @@
 import { RoutineCycleDaysRepository } from "@my-rdb/repositories/routine-cycle-days.repository";
 import { RoutineCycleEveryRepository } from "@my-rdb/repositories/routine-cycle-every.repository";
+import { RoutineToDoRepository } from "@my-rdb/repositories/routine-to-do.repository";
 import { RoutineRepository } from "@my-rdb/repositories/routine.repository";
 import { ToDoRepository } from "@my-rdb/repositories/to-do.repository";
 import { UserRepository } from "@my-rdb/repositories/user.repository";
 import RedisClient from "@my-redis/client";
 import { AuthService } from "@services/auth.service";
+import { RoutineToDoService } from "@services/routine-to-do.service";
 import { RoutineService } from "@services/routine.service";
 import { ToDoService } from "@services/to-do.service";
 import INVERSIFY_TYPES from "@utils/invesify-type";
@@ -16,11 +18,15 @@ const container = new Container();
 container.bind<AuthService>(INVERSIFY_TYPES.AuthService).to(AuthService).inSingletonScope();
 container.bind<ToDoService>(INVERSIFY_TYPES.ToDoService).to(ToDoService).inSingletonScope();
 container.bind<RoutineService>(INVERSIFY_TYPES.RoutineService).to(RoutineService).inSingletonScope();
+container.bind<RoutineToDoService>(INVERSIFY_TYPES.RoutineToDoService).to(RoutineToDoService).inSingletonScope();
 
 // repository
 container.bind<typeof ToDoRepository>(INVERSIFY_TYPES.ToDoRepository).toConstantValue(ToDoRepository);
 container.bind<typeof UserRepository>(INVERSIFY_TYPES.UserRepository).toConstantValue(UserRepository);
 container.bind<typeof RoutineRepository>(INVERSIFY_TYPES.RoutineRepository).toConstantValue(RoutineRepository);
+container
+  .bind<typeof RoutineToDoRepository>(INVERSIFY_TYPES.RoutineToDoRepository)
+  .toConstantValue(RoutineToDoRepository);
 container
   .bind<typeof RoutineCycleDaysRepository>(INVERSIFY_TYPES.RoutineCycleDaysRepository)
   .toConstantValue(RoutineCycleDaysRepository);

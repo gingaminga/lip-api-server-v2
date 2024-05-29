@@ -5,6 +5,8 @@ const INVERSIFY_TYPES = {
   RoutineCycleEveryRepository: Symbol.for("RoutineCycleEveryRepository"),
   RoutineRepository: Symbol.for("RoutineRepository"),
   RoutineService: Symbol.for("RoutineService"),
+  RoutineToDoService: Symbol.for("RoutineToDoService"),
+  RoutineToDoRepository: Symbol.for("RoutineToDoRepository"),
   ToDoRepository: Symbol.for("ToDoRepository"),
   ToDoService: Symbol.for("ToDoService"),
   UserRepository: Symbol.for("UserRepository"),

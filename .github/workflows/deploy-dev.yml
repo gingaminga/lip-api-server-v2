@@ -72,7 +72,7 @@ jobs:
         run: |
           docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
           docker build -f Dockerfile.dev -t pol-api:${GITHUB_SHA::7} .
-          docker push "$DOCKER_USERNAME"/pol-api:${GITHUB_SHA::7}
+          docker push "$DOCKER_USERNAME"/pol-api
 
       - name: SSH connection and deploy
         uses: appleboy/ssh-action@master

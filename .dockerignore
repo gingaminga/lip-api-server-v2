@@ -1,0 +1,10 @@
+/.github
+/coverage
+/dist
+/logs
+/node_modules
+.env.sample
+.gitignore
+.prettierrc
+nodemon.json
+README.md

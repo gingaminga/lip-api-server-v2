@@ -71,8 +71,7 @@ jobs:
       - name: Docker build & push
         run: |
           docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
-          docker build -f Dockerfile.dev .
-          docker tag pol-api "$DOCKER_USERNAME"/pol-api:${GITHUB_SHA::7}
+          docker build -f Dockerfile.dev -t pol-api:"$DOCKER_USERNAME"/pol-api:${GITHUB_SHA::7} .
           docker push "$DOCKER_USERNAME"/pol-api:${GITHUB_SHA::7}
 
       - name: SSH connection and deploy

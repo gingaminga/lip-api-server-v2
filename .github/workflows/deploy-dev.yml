@@ -70,8 +70,8 @@ jobs:
 
       - name: Docker build & push
         run: |
-          sudo docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
-          sudo docker build -f Dockerfile.dev -t .
+          docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+          docker build -f Dockerfile.dev .
           docker tag pol-api "$DOCKER_USERNAME"/pol-api:${GITHUB_SHA::7}
           docker push "$DOCKER_USERNAME"/pol-api:${GITHUB_SHA::7}
 

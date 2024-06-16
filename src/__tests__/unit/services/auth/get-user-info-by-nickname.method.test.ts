@@ -45,6 +45,7 @@ describe(`[Auth service] getUserInfoByNickname method test :)`, () => {
       nickname,
       socialKey: `kakao-123412341234`,
       socialType: "kakao",
+      toDos: [],
     };
     mockedUserRepository.findOne.mockResolvedValue(mockedUser);
 

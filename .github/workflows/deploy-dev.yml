@@ -72,8 +72,8 @@ jobs:
         run: |
           docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
           docker build -f Dockerfile.dev -t pol-api .
-          docker tag pol-api "$DOCKER_USERNAME"/pol-api:${GITHUB_SHA::7}
-          docker push "$DOCKER_USERNAME"/pol-api:${GITHUB_SHA::7}
+          docker tag pol-api "$DOCKER_USERNAME"/pol-api
+          docker push "$DOCKER_USERNAME"/pol-api
 
       - name: SSH connection and deploy
         uses: appleboy/ssh-action@master
@@ -83,5 +83,5 @@ jobs:
           key: $SSH_KEY
           envs: GITHUB_SHA
           script: |
-            sudo docker pull "$DOCKER_USERNAME"/pol-api:${GITHUB_SHA::7}
-            sudo docker run -d -e TZ=Asia/Seoul -p 3001:3001 "$DOCKER_USERNAME"/pol-api:${GITHUB_SHA::7}
+            sudo docker pull "$DOCKER_USERNAME"/pol-api
+            sudo docker run -d -e TZ=Asia/Seoul -p 3001:3001 "$DOCKER_USERNAME"/pol-api

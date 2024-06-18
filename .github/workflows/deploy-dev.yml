@@ -83,5 +83,5 @@ jobs:
           key: $SSH_KEY
           envs: GITHUB_SHA
           script: |
-            docker pull "$DOCKER_USERNAME"/pol-api:${GITHUB_SHA::7}
-            docker run -d -e TZ=Asia/Seoul -p 3001:3001 "$DOCKER_USERNAME"/pol-api:${GITHUB_SHA::7}
+            sudo docker pull "$DOCKER_USERNAME"/pol-api:${GITHUB_SHA::7}
+            sudo docker run -d -e TZ=Asia/Seoul -p 3001:3001 "$DOCKER_USERNAME"/pol-api:${GITHUB_SHA::7}

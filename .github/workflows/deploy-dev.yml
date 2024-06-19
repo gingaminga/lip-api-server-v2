@@ -83,4 +83,4 @@ jobs:
           key: $SSH_KEY
           envs: GITHUB_SHA
           script: |
-            sudo docker login -u "$DOCKER_USERNAME" -p '$DOCKER_PASSWORD'
+            sudo docker login -u '$DOCKER_USERNAME' -p '$DOCKER_PASSWORD'

@@ -83,4 +83,6 @@ jobs:
           key: $SSH_KEY
           envs: GITHUB_SHA
           script: |
-            sudo docker login -u  ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/pol-api
+            sudo docker run -d -e TZ=Asia/Seoul -p 3001:3001 ${{ secrets.DOCKER_USERNAME }}/pol-api

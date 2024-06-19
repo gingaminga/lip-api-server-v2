@@ -84,5 +84,6 @@ jobs:
           envs: GITHUB_SHA
           script: |
             sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            sudo docker stop pol-api
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/pol-api:${GITHUB_SHA::7}
-            sudo docker run -d -e TZ=Asia/Seoul -p 3001:3001 ${{ secrets.DOCKER_USERNAME }}/pol-api:${GITHUB_SHA::7}
+            sudo docker run -d -e TZ=Asia/Seoul -p 3001:3001 --name pol-api ${{ secrets.DOCKER_USERNAME }}/pol-api:${GITHUB_SHA::7}

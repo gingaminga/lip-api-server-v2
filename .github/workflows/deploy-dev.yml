@@ -6,81 +6,57 @@ on:
   pull_request:
     branches: ["develop"]
 
-# CI
 jobs:
-  build:
+  CI:
     environment: development
     runs-on: ubuntu-22.04
-
-    env:
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      SSH_HOST: ${{ secrets.SSH_HOST }}
-      SSH_KEY: ${{ secrets.SSH_KEY }}
-      SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
-
     steps:
       - uses: actions/checkout@v3
-
       - name: Create environment file
-        env:
-          JWT_KEY: ${{ secrets.JWT_KEY }}
-          LOG_MAX_COUNT: ${{ secrets.LOG_MAX_COUNT }}
-          LOG_MAX_SIZE: ${{ secrets.LOG_MAX_SIZE }}
-          LOG_PATH: ${{ secrets.LOG_PATH }}
-          REDIS_HOST: ${{ secrets.REDIS_HOST }}
-          REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
-          REDIS_PORT: ${{ secrets.REDIS_PORT }}
-          RELATION_DB_HOST: ${{ secrets.RELATION_DB_HOST }}
-          RELATION_DB_PASSWORD: ${{ secrets.RELATION_DB_PASSWORD }}
-          RELATION_DB_PORT: ${{ secrets.RELATION_DB_PORT }}
-          RELATION_DB_SCHEMA: ${{ secrets.RELATION_DB_SCHEMA }}
-          RELATION_DB_TYPE: ${{ secrets.RELATION_DB_TYPE }}
-          RELATION_DB_USER_NAME: ${{ secrets.RELATION_DB_USER_NAME }}
-          SOCIAL_GOOGLE_KEY: ${{ secrets.SOCIAL_GOOGLE_KEY }}
-          SOCIAL_GOOGLE_SECRET_KEY: ${{ secrets.SOCIAL_GOOGLE_SECRET_KEY }}
-          SOCIAL_KAKAO_KEY: ${{ secrets.SOCIAL_KAKAO_KEY }}
-          SOCIAL_KAKAO_SECRET_KEY: ${{ secrets.SOCIAL_KAKAO_SECRET_KEY }}
-          SOCIAL_NAVER_KEY: ${{ secrets.SOCIAL_NAVER_KEY }}
-          SOCIAL_NAVER_SECRET_KEY: ${{ secrets.SOCIAL_NAVER_SECRET_KEY }}
-          SOCIAL_REDIRECT_URI: ${{ secrets.SOCIAL_REDIRECT_URI }}
         run: |
           touch .env
-          echo JWT_KEY="$JWT_KEY" >> .env
-          echo LOG_MAX_COUNT="$LOG_MAX_COUNT" >> .env
-          echo LOG_MAX_SIZE="$LOG_MAX_SIZE" >> .env
-          echo LOG_PATH="$LOG_PATH" >> .env
-          echo REDIS_HOST="$REDIS_HOST" >> .env
-          echo REDIS_PASSWORD="$REDIS_PASSWORD" >> .env
-          echo REDIS_PORT="$REDIS_PORT" >> .env
-          echo RELATION_DB_HOST="$RELATION_DB_HOST" >> .env
-          echo RELATION_DB_PASSWORD="$RELATION_DB_PASSWORD" >> .env
-          echo RELATION_DB_PORT="$RELATION_DB_PORT" >> .env
-          echo RELATION_DB_SCHEMA="$RELATION_DB_SCHEMA" >> .env
-          echo RELATION_DB_TYPE="$RELATION_DB_TYPE" >> .env
-          echo RELATION_DB_USER_NAME="$RELATION_DB_USER_NAME" >> .env
-          echo SOCIAL_GOOGLE_KEY="$SOCIAL_GOOGLE_KEY" >> .env
-          echo SOCIAL_GOOGLE_SECRET_KEY="$SOCIAL_GOOGLE_SECRET_KEY" >> .env
-          echo SOCIAL_KAKAO_KEY="$SOCIAL_KAKAO_KEY" >> .env
-          echo SOCIAL_KAKAO_SECRET_KEY="$SOCIAL_KAKAO_SECRET_KEY" >> .env
-          echo SOCIAL_NAVER_KEY="$SOCIAL_NAVER_KEY" >> .env
-          echo SOCIAL_NAVER_SECRET_KEY="$SOCIAL_NAVER_SECRET_KEY" >> .env
-          echo SOCIAL_REDIRECT_URI="$SOCIAL_REDIRECT_URI" >> .env
+          echo JWT_KEY=${{ secrets.JWT_KEY }} >> .env
+          echo LOG_MAX_COUNT=${{ secrets.LOG_MAX_COUNT }} >> .env
+          echo LOG_MAX_SIZE=${{ secrets.LOG_MAX_SIZE }} >> .env
+          echo LOG_PATH=${{ secrets.LOG_PATH }} >> .env
+          echo REDIS_HOST=${{ secrets.REDIS_HOST }} >> .env
+          echo REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} >> .env
+          echo REDIS_PORT=${{ secrets.REDIS_PORT }} >> .env
+          echo RELATION_DB_HOST=${{ secrets.RELATION_DB_HOST }} >> .env
+          echo RELATION_DB_PASSWORD=${{ secrets.RELATION_DB_PASSWORD }} >> .env
+          echo RELATION_DB_PORT=${{ secrets.RELATION_DB_PORT }} >> .env
+          echo RELATION_DB_SCHEMA=${{ secrets.RELATION_DB_SCHEMA }} >> .env
+          echo RELATION_DB_TYPE=${{ secrets.RELATION_DB_TYPE }} >> .env
+          echo RELATION_DB_USER_NAME=${{ secrets.RELATION_DB_USER_NAME }} >> .env
+          echo SOCIAL_GOOGLE_KEY=${{ secrets.SOCIAL_GOOGLE_KEY }} >> .env
+          echo SOCIAL_GOOGLE_SECRET_KEY=${{ secrets.SOCIAL_GOOGLE_SECRET_KEY }} >> .env
+          echo SOCIAL_KAKAO_KEY=${{ secrets.SOCIAL_KAKAO_KEY }} >> .env
+          echo SOCIAL_KAKAO_SECRET_KEY=${{ secrets.SOCIAL_KAKAO_SECRET_KEY }} >> .env
+          echo SOCIAL_NAVER_KEY=${{ secrets.SOCIAL_NAVER_KEY }} >> .env
+          echo SOCIAL_NAVER_SECRET_KEY=${{ secrets.SOCIAL_NAVER_SECRET_KEY }} >> .env
+          echo SOCIAL_REDIRECT_URI=${{ secrets.SOCIAL_REDIRECT_URI }} >> .env
           cat .env | head -n 1
 
-      - name: Docker build & push
+      - name: Docker build
         run: |
-          docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker build -f Dockerfile.dev -t pol-api .
-          docker tag pol-api "$DOCKER_USERNAME"/pol-api:${GITHUB_SHA::7}
-          docker push "$DOCKER_USERNAME"/pol-api:${GITHUB_SHA::7}
 
+      - name: Docker push
+        run: |
+          docker tag pol-api ${{ secrets.DOCKER_USERNAME }}/pol-api:${GITHUB_SHA::7}
+          docker push ${{ secrets.DOCKER_USERNAME }}/pol-api:${GITHUB_SHA::7}
+  CD:
+    needs: CI
+    environment: development
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: appleboy/ssh-action@master
       - name: SSH connection and deploy
-        uses: appleboy/ssh-action@master
         with:
-          host: $SSH_HOST
-          username: $SSH_USERNAME
-          key: $SSH_KEY
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
           envs: GITHUB_SHA
           script: |
             sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}

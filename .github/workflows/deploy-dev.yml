@@ -53,8 +53,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: appleboy/ssh-action@master
       - name: SSH connection and deploy
+        uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}

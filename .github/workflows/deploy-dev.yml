@@ -46,21 +46,3 @@ jobs:
         run: |
           docker tag pol-api ${{ secrets.DOCKER_USERNAME }}/pol-api:${GITHUB_SHA::7}
           docker push ${{ secrets.DOCKER_USERNAME }}/pol-api:${GITHUB_SHA::7}
-  CD:
-    needs: CI
-    environment: development
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: appleboy/ssh-action@master
-      - name: SSH connection and deploy
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          envs: GITHUB_SHA
-          script: |
-            sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            sudo docker stop pol-api
-            sudo docker rm pol-api
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/pol-api:${GITHUB_SHA::7}
-            sudo docker run -d -e TZ=Asia/Seoul -p 3001:3001 --name pol-api ${{ secrets.DOCKER_USERNAME }}/pol-api:${GITHUB_SHA::7}
